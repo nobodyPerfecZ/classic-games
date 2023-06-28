@@ -1,0 +1,3 @@
+pycrunch
+pygame
+numpy
