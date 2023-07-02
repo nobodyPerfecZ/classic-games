@@ -50,7 +50,7 @@ class Board:
 
     @property
     def shape(self) -> tuple[int, int]:
-        return self.height, self.width
+        return self.grid.shape
 
     @property
     def total_history(self) -> list[np.ndarray]:
@@ -129,7 +129,7 @@ class Board:
                 np.all(self.grid.__eq__(other.grid)) and \
                 (self.height == other.height) and \
                 (self.width == other.width)
-        elif isinstance(other.np.ndarray):
+        elif isinstance(other, np.ndarray):
             return np.all(self.grid.__eq__(other))
         else:
             raise ValueError("ERROR_BOARD: type of other should be Board or np.ndarray!")

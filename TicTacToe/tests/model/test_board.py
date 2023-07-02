@@ -8,7 +8,7 @@ from TicTacToe.model.board import Board
 
 class TestBoard(unittest.TestCase):
     """
-    Tests the class Board and its methods
+    Tests the class Board and its methods.
     """
 
     def setUp(self):
