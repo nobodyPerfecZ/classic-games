@@ -21,6 +21,12 @@ jobs:
         uses: py-actions/py-dependency-install@v4
         with:
           path: "requirements.txt"
-      - name: Run Unittest on TicTacToe
+      - name: Unittest on tictactoe
         run: |
-          python -m unittest
+          python -m unittest discover -s tests/tictactoe -p "test_*.py"
+      - name: Unittest on fourwins
+        run: |
+          python -m unittest discover -s tests/fourwins -p "test_*.py"
+      - name: Unittest on sudoku
+        run: |
+          python -m unittest discover -s tests/sudoku -p "test_*.py"
