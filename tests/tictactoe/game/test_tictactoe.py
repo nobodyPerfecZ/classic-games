@@ -16,7 +16,7 @@ class TestTicTacToeV0(unittest.TestCase):
 
     def setUp(self):
         # Create the tictactoe environment
-        self.env = gym.make("TicTacToe-v0")
+        self.env = gym.make("TicTacToe-v0", render_mode="human")
 
     def tearDown(self):
         # Close the tictactoe environment
@@ -86,8 +86,21 @@ class TestTicTacToeV0(unittest.TestCase):
         """
         Tests the method render().
         """
-        # TODO: Implement here!
-        pass
+        # Perform actions and render frames
+        observation, info = self.env.reset(seed=0)
+        your_player = MinMaxPlayer(
+            your_symbol=1,
+            enemy_symbol=-1,
+            tiles_to_win=3,
+            seed=0
+        )
+        for _ in range(5):
+            action = your_player.act(observation)
+            observation, reward, terminated, truncated, info = self.env.step(action)
+            self.env.render()
+
+            if terminated or truncated:
+                break
 
     def test_run_episode(self):
         """
@@ -103,6 +116,7 @@ class TestTicTacToeV0(unittest.TestCase):
         for _ in range(5):
             action = your_player.act(observation)
             observation, reward, terminated, truncated, info = self.env.step(action)
+            self.env.render()
 
             if terminated or truncated:
                 break

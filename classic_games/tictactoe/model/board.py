@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 
 
@@ -28,12 +26,13 @@ class TicTacToeBoard:
         assert your_symbol != 0 and enemy_symbol != 0, "#ERROR_BOARD: symbol of you and enemy cannot be 0!"
         assert your_symbol != enemy_symbol, "#ERROR_BOARD: symbol of you and enemy cannot be the same!"
 
-        self._board = board.copy()
-        self._tiles_to_win = tiles_to_win
-        self._your_symbol = your_symbol
-        self._enemy_symbol = enemy_symbol
-        self._current_player = your_start
-        self._winner = 0
+        self._board: np.ndarray = board.copy()
+        self._tiles_to_win: int = tiles_to_win
+        self._your_symbol: int = your_symbol
+        self._enemy_symbol: int = enemy_symbol
+        self._current_player: bool = your_start
+        self._winner: int = 0
+        self._history: list[np.ndarray] = [self._board.copy()]
 
     @property
     def row(self):
@@ -185,6 +184,15 @@ class TicTacToeBoard:
             self._board = board.copy()
         return successors
 
+    def get_history(self) -> list[np.ndarray]:
+        """
+        Returns the entire history of changes on the board.
+
+        Returns:
+            list[np.ndarray]: history of changes of the board
+        """
+        return self._history
+
     def get_actions(self) -> list[int]:
         """
         Returns all possible actions of the board.
@@ -226,6 +234,9 @@ class TicTacToeBoard:
 
             # Update the current player
             self._current_player = not self._current_player
+
+            # Update the history
+            self._history += [self._board.copy()]
         else:
             # Case: Position is already taken
             raise ValueError("#ERROR_TICTACTOE: action is invalid!")

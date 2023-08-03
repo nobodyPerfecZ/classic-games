@@ -68,6 +68,24 @@ class TestTicTacToeBoard(unittest.TestCase):
         np.testing.assert_array_equal(np.array([[-1, 1, 0], [1, -1, 1], [-1, 1, -1]]), successors[0])
         np.testing.assert_array_equal(np.array([[0, 1, -1], [1, -1, 1], [-1, 1, -1]]), successors[1])
 
+    def test_get_history(self):
+        """
+        Tests the method get_history().
+        """
+        # Set on (0, 0) tile := -1 and on (0, 2) tile:= 1
+        self.board.set(0)
+        self.board.set(2)
+
+        board_history = self.board.get_history()
+        self.assertEqual(3, len(board_history))
+        np.testing.assert_array_equal(np.array([[0, 1, 0], [1, -1, 1], [-1, 1, -1]]), board_history[0])
+        np.testing.assert_array_equal(np.array([[-1, 1, 0], [1, -1, 1], [-1, 1, -1]]), board_history[1])
+        np.testing.assert_array_equal(np.array([[-1, 1, 1], [1, -1, 1], [-1, 1, -1]]), board_history[2])
+
+        terminated_history = self.terminated_board.get_history()
+        self.assertEqual(1, len(terminated_history))
+        np.testing.assert_array_equal(np.array([[1, 1, 1], [1, -1, 1], [-1, 1, -1]]), terminated_history[0])
+
     def test_get_actions(self):
         """
         Tests the method get_actions().

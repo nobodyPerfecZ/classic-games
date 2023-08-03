@@ -8,6 +8,7 @@ from gymnasium.spaces import Discrete, Box
 from classic_games.tictactoe.agent.abstract_player import Player
 from classic_games.tictactoe.agent.random_player import RandomPlayer
 from classic_games.tictactoe.model.board import TicTacToeBoard
+from classic_games.tictactoe.model.render import TicTacToeRender
 from classic_games.tictactoe.model.ruleset import RuleSettings
 
 
@@ -25,17 +26,28 @@ class TicTacToeEnv(gym.Env):
             ),
             enemy_player: type[Player] = RandomPlayer,
             seed: Optional[int] = None,
+            render_mode: Optional[str] = None,
     ):
         """
         Args:
             rule_settings (RuleSettings): contains meta information about the TicTacToe Environment
             enemy_player (type[Player]): type of the enemy player. Defaults to RandomPlayer.
             seed (Optional[int]): seed for the random number generator. Defaults to None.
+            render_mode (Optional[str]): mode to render the environment. Defaults to None
+
         """
         super(TicTacToeEnv, self).__init__()
 
         # Safe the rule settings
         self._rule_settings = rule_settings
+
+        self._render = TicTacToeRender(
+            window_shape=(400, 600),
+            board_shape=self._rule_settings.board_shape,
+            mode=render_mode,
+            your_symbol=self._rule_settings.your_symbol,
+            enemy_symbol=self._rule_settings.enemy_symbol,
+        )
 
         # Define the action and observation space
         # n*m - 1 possible positions on the board. E.g.: (3x3) -> (0, 1, ..., 8)
@@ -138,10 +150,14 @@ class TicTacToeEnv(gym.Env):
 
     def render(self, mode="human"):
         if mode == "human":
-            # TODO: Add Pygame render object
-            print(self._board)
+            self._render.init()
+            self._render.draw_step(self._board.get_history())
         elif mode == "rgb_array":
-            # TODO: Optionally, you can create an RGB array for visualization
-            pass
+            self._render.init()
+            return self._render.get_rgb_array(self._board.get_current())
+
         else:
             super(TicTacToeEnv, self).render(mode=mode)
+
+    def close(self):
+        self._render.close()

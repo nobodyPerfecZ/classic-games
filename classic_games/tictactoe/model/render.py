@@ -1,3 +1,5 @@
+from typing import Union
+
 import numpy as np
 import pygame
 
@@ -8,34 +10,36 @@ class TicTacToeRender:
             self,
             window_shape: tuple[int, int],  # in (H, W) format
             board_shape: tuple[int, int],  # in (H, W) format
+            mode: str,  # either "human" or "rgb_array"
             your_symbol: int,
             enemy_symbol: int,
             your_color: tuple[int, int, int] = (0, 128, 0),  # in (R, G, B) format
             enemy_color: tuple[int, int, int] = (255, 0, 0),  # in (R, G, B) format
             caption: str = "TicTacToe-v0",
     ):
-        self._window_shape = window_shape
-        self._board_shape = board_shape
-        self._your_symbol = your_symbol
-        self._enemy_symbol = enemy_symbol
-        self._your_color = your_color
-        self._enemy_color = enemy_color
-        self._caption = caption
-
-        self._screen = None
-        self._clock = None
-        self._font = None
-
-    def init(self):
         """
-        TODO: Add Documentation
+        Args:
+            window_shape (tuple[int, int]): shape of the pygame window/rgb-array in (H, W) format
+            board_shape (tuple[int, int]): shape of the tictactoe board in (H, W) format
+            mode (str): render mode. Can be either "human" or "rgb_array"
+            your_symbol (int): symbol of your player
+            enemy_symbol (int): symbol of enemy player
+            your_color (tuple[int, int, int]): color of your player symbol
+            enemy_color (tuple[int, int, int]): color of enemy player symbol
+            caption (str): caption of the pygame window
         """
-        # Start the pygame window
-        pygame.init()
-        self._screen = pygame.display.set_mode((self.window_width, self.window_height))
-        pygame.display.set_caption(self._caption)
-        self._clock = pygame.time.Clock()
-        self._font = pygame.font.SysFont("Arial", 100)
+        self._window_shape: tuple[int, int] = window_shape
+        self._board_shape: tuple[int, int] = board_shape
+        self._mode: str = mode
+        self._your_symbol: int = your_symbol
+        self._enemy_symbol: int = enemy_symbol
+        self._your_color: int = your_color
+        self._enemy_color: int = enemy_color
+        self._caption: str = caption
+
+        self._screen: Union[pygame.display, pygame.Surface] = None
+        self._clock: pygame.time.Clock = None
+        self._font: pygame.font = None
 
     @property
     def window_height(self) -> int:
@@ -53,11 +57,50 @@ class TicTacToeRender:
     def board_width(self) -> int:
         return self._board_shape[1]
 
-    def draw_game(self, history: list[np.ndarray]):
+    def init(self):
         """
-        # TODO: Add Documentation
+        Initialize the pygame objects, to render the frames.
         """
-        for state in history:
+        pygame.init()
+        pygame.display.set_caption(self._caption)
+
+        if self._mode == "human":
+            self._screen = pygame.display.set_mode((self.window_width, self.window_height))
+        elif self._mode == "rgb_array":
+            self._screen = pygame.Surface((self.window_width, self.window_height))
+        else:
+            raise ValueError("#ERROR_RENDER: Unknown render mode!")
+
+        self._clock = pygame.time.Clock()
+        self._font = pygame.font.SysFont("Arial", 100)
+
+    def close(self):
+        """
+        Closes the pygame window.
+        """
+        pygame.quit()
+
+    def get_rgb_array(self, board: np.ndarray) -> np.ndarray:
+        """
+        Returns the rgb image of the pygame window in (H, W, C) format.
+
+        Args:
+            board (np.ndarray): tictactoe board of shape (H, W)
+
+        Returns:
+            np.ndarray: np.array of shape (H, W, C)
+        """
+        self._draw_state(board)
+        return np.transpose(np.array(pygame.surfarray.pixels3d(self._screen)), axes=(1, 0, 2))  # in (H, W, C) format
+
+    def draw_step(self, history: list[np.ndarray]):
+        """
+        Draws a step from the tictactoe environment into a frame.
+
+        Args:
+            history (list[np.ndarray]): history of all previous states
+        """
+        for state in history[-2:]:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -65,13 +108,17 @@ class TicTacToeRender:
             self._screen.fill((255, 255, 255))
             self._draw_state(state)
 
-            pygame.display.flip()
+            if self._mode == "human":
+                pygame.display.flip()
             self._clock.tick(30)
             pygame.time.delay(1000)
 
     def _draw_state(self, board: np.ndarray):
         """
-        # TODO: Add Documentation
+        Draws the given board into a frame.
+
+        Args:
+            board (np.ndarray): history of all previous states
         """
         # Draw the board
         self._draw_board((0, 0, 0), 10)
@@ -96,7 +143,11 @@ class TicTacToeRender:
             thickness: int,
     ):
         """
-        # TODO: Add Documentation
+        Draws the TicTacToe Board as a frame.
+
+        Args:
+            board_color (tuple[int, int, int]): color of the lines on the screen in (R, G, B) format
+            thickness (int): thickness of the lines
         """
         # Draw row lines
         for i in range(1, self.board_height):
@@ -115,32 +166,14 @@ class TicTacToeRender:
             pos: tuple[int, int],  # in (H, W) format
     ):
         """
-        # TODO: Add Documentation
+        Draws a text as a frame.
+
+        Args:
+            text (str): included text
+            text_color (tuple[int, int, int]): color of the text in (R, G, B) format
+            pos (tuple[int, int]): middle position (as pixels) of the text in (H, W) format
+
         """
         img = self._font.render(text, True, text_color)
         center_pos = (pos[1] - img.get_width() // 2, pos[0] - img.get_height() // 2)
         self._screen.blit(img, center_pos)
-
-
-if __name__ == "__main__":
-    render = TicTacToeRender(
-        window_shape=(400, 600),
-        board_shape=(3, 3),
-        your_symbol=1,
-        enemy_symbol=-1,
-    )
-
-    states = [
-        np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]]),
-        np.array([[1, 0, 0], [0, 0, 0], [0, 0, 0]]),
-        np.array([[1, -1, 0], [0, 0, 0], [0, 0, 0]]),
-        np.array([[1, -1, 1], [0, 0, 0], [0, 0, 0]]),
-        np.array([[1, -1, 1], [-1, 0, 0], [0, 0, 0]]),
-        np.array([[1, -1, 1], [-1, 1, 0], [0, 0, 0]]),
-        np.array([[1, -1, 1], [-1, 1, -1], [0, 0, 0]]),
-        np.array([[1, -1, 1], [-1, 1, -1], [1, 0, 0]]),
-        np.array([[1, -1, 1], [-1, 1, -1], [1, -1, 0]]),
-        np.array([[1, -1, 1], [-1, 1, -1], [1, -1, 1]]),
-    ]
-    render.init()
-    render.draw_game(states)
