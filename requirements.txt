@@ -1,4 +1,3 @@
 gymnasium
 numpy
-xxhash
 pygame

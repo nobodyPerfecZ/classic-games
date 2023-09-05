@@ -16,6 +16,12 @@ class TicTacToeEnv(gym.Env):
     """
     Represents the TicTacToe Environment in as gym.env object.
     """
+    # TODO: Change RuleSettings to dataclass and combine it with the metadata ...
+    metadata = {
+        "render_modes": ["human", "rgb_array"],
+        "render_fps": 30,
+    }
+
     def __init__(
             self,
             rule_settings: RuleSettings = RuleSettings(
@@ -58,6 +64,7 @@ class TicTacToeEnv(gym.Env):
             shape=self._rule_settings.board_shape,
             dtype=np.int8,
         )
+        self.render_mode = render_mode
 
         # Create enemy player (seeds are placed later on)
         self._enemy_player = enemy_player(
@@ -148,16 +155,15 @@ class TicTacToeEnv(gym.Env):
 
         return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, self._rule_settings.export()
 
-    def render(self, mode="human"):
-        if mode == "human":
+    def render(self):
+        if self.render_mode == "human":
+            if self._rule_settings.board_shape[0] > 4 and self._rule_settings.board_shape[1] > 4:
+                raise ValueError("#ERROR_ENV: You can only render the board with a shape of maximal (4, 4)!")
             self._render.init()
             self._render.draw_step(self._board.get_history())
-        elif mode == "rgb_array":
+        elif self.render_mode == "rgb_array":
             self._render.init()
             return self._render.get_rgb_array(self._board.get_current())
-
-        else:
-            super(TicTacToeEnv, self).render(mode=mode)
 
     def close(self):
         self._render.close()

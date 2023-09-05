@@ -2,7 +2,6 @@ from typing import Optional
 
 import numpy as np
 from gymnasium.core import ObsType
-import xxhash
 
 from classic_games.tictactoe.agent.abstract_player import Player
 from classic_games.tictactoe.model.board import TicTacToeBoard
@@ -12,24 +11,34 @@ class MiniMax:
     """
     Implements the Mini-Max algorithm with alpha/beta pruning.
     """
+
     # TODO: Implement MinMax Algorithm in Cython (to make it much faster)
 
     def __init__(self, your_symbol: int, enemy_symbol: int, tiles_to_win: int):
         """
         Args:
-             your_symbol (int): symbol of your player
+            your_symbol (int): symbol of your player
             enemy_symbol (int): symbol of enemy player
             tiles_to_win (int): number of tiles to be in row/col/diagonal/anti-diagonal to win the game
         """
         # cache variable to safe for each hash(state) := (reward, best action)
         self._cache: dict[str, tuple[int, float]] = {}
         self._your_start: bool = True
-        self._depth: float = 0
+        self._depth: int = 0
         self._alpha: float = -np.inf
         self._beta: float = np.inf
-        self._your_symbol = your_symbol
-        self._enemy_symbol = enemy_symbol
-        self._tiles_to_win = tiles_to_win
+        self._your_symbol: int = your_symbol
+        self._enemy_symbol: int = enemy_symbol
+        self._tiles_to_win: int = tiles_to_win
+
+    def _reset(self):
+        """
+        Resets the parameters of the minimax-search.
+        """
+        self._your_start = True
+        self._depth = 0
+        self._alpha = -np.inf
+        self._beta = np.inf
 
     def get_best_action(self, board: ObsType) -> int:
         """
@@ -41,18 +50,14 @@ class MiniMax:
         Returns:
             int: best action with the given state
         """
-
         # Create the hash value
-        hash_value = xxhash.xxh64(board).hexdigest()
+        hash_value = board.tobytes()
         if hash_value in self._cache:
             # Case: Already used minimax algorithm for that state
             return self._cache[hash_value][1]
 
         # Reset the parameters
-        self._your_start = True
-        self._depth = 0
-        self._alpha = -np.inf
-        self._beta = np.inf
+        self._reset()
 
         # Perform the minimax algorithm (with alpha-beta pruning)
         reward, action = self._minimax(board)
