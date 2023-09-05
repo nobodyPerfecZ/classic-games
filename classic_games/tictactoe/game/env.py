@@ -48,6 +48,7 @@ class TicTacToeEnv(gym.Env):
 
         # Safe the rule settings
         self._rule_settings = rule_settings
+        TicTacToeEnv.metadata = self._rule_settings.to_dict()
 
         self._render = TicTacToeRender(
             window_shape=(400, 600),
@@ -127,14 +128,14 @@ class TicTacToeEnv(gym.Env):
             action = self._enemy_player.act(self._board.get_current())
             self._board.set(action)
 
-        return self._board.get_current(), self._rule_settings.to_dict()
+        return self._board.get_current(), TicTacToeEnv.metadata
 
     def step(self, action: int):
         if self._terminated:
             # Case: Game is already finished
             # Do no step anymore
             return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, \
-                   self._rule_settings.to_dict()
+                   TicTacToeEnv.metadata
 
         # Do the action
         self._board.set(action)
@@ -145,7 +146,7 @@ class TicTacToeEnv(gym.Env):
             # Case: Game is finished after the last move
             # Do no step anymore
             return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, \
-                   self._rule_settings.to_dict()
+                   TicTacToeEnv.metadata
 
         if not self._board.get_current_player():
             # Case: Next player is player2
@@ -158,7 +159,7 @@ class TicTacToeEnv(gym.Env):
             self._terminated = self._board.check_terminated()
 
         return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, \
-               self._rule_settings.to_dict()
+               TicTacToeEnv.metadata
 
     def render(self):
         if self._render_mode == "human":
