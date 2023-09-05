@@ -7,7 +7,7 @@ from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer
 
 class TestTicTacToeV0(unittest.TestCase):
     """
-    Tests the class tictactoe.
+    Tests the class TicTacToeEnv.
     """
 
     @classmethod

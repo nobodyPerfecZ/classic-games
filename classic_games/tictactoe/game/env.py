@@ -9,37 +9,39 @@ from classic_games.tictactoe.agent.abstract_player import Player
 from classic_games.tictactoe.agent.random_player import RandomPlayer
 from classic_games.tictactoe.model.board import TicTacToeBoard
 from classic_games.tictactoe.model.render import TicTacToeRender
-from classic_games.tictactoe.model.ruleset import RuleSettings
+from classic_games.tictactoe.model.metadata import Metadata
 
 
 class TicTacToeEnv(gym.Env):
     """
     Represents the TicTacToe Environment in as gym.env object.
     """
-    # TODO: Change RuleSettings to dataclass and combine it with the metadata ...
-    metadata = {
+    # Has to be here so that we do not get any errors in the console
+    metadata: dict = {
         "render_modes": ["human", "rgb_array"],
         "render_fps": 30,
     }
 
     def __init__(
             self,
-            rule_settings: RuleSettings = RuleSettings(
-                board_shape=(3, 3),
-                tiles_to_win=3,
-                your_symbol=1,
-                enemy_symbol=-1,
-            ),
+            rule_settings: Metadata = Metadata(),
             enemy_player: type[Player] = RandomPlayer,
             seed: Optional[int] = None,
             render_mode: Optional[str] = None,
     ):
         """
         Args:
-            rule_settings (RuleSettings): contains meta information about the TicTacToe Environment
-            enemy_player (type[Player]): type of the enemy player. Defaults to RandomPlayer.
-            seed (Optional[int]): seed for the random number generator. Defaults to None.
-            render_mode (Optional[str]): mode to render the environment. Defaults to None
+            rule_settings (Metadata):
+                contains meta information about the TicTacToe Environment
+            enemy_player (type[Player]):
+                type of the enemy player.
+                Defaults to RandomPlayer.
+            seed (Optional[int]):
+                seed for the random number generator.
+                Defaults to None.
+            render_mode (Optional[str]):
+                mode to render the environment.
+                Defaults to None
 
         """
         super(TicTacToeEnv, self).__init__()
@@ -64,7 +66,7 @@ class TicTacToeEnv(gym.Env):
             shape=self._rule_settings.board_shape,
             dtype=np.int8,
         )
-        self.render_mode = render_mode
+        self._render_mode = render_mode
 
         # Create enemy player (seeds are placed later on)
         self._enemy_player = enemy_player(
@@ -125,13 +127,14 @@ class TicTacToeEnv(gym.Env):
             action = self._enemy_player.act(self._board.get_current())
             self._board.set(action)
 
-        return self._board.get_current(), self._rule_settings.export()
+        return self._board.get_current(), self._rule_settings.to_dict()
 
     def step(self, action: int):
         if self._terminated:
             # Case: Game is already finished
             # Do no step anymore
-            return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, self._rule_settings.export()
+            return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, \
+                   self._rule_settings.to_dict()
 
         # Do the action
         self._board.set(action)
@@ -141,7 +144,8 @@ class TicTacToeEnv(gym.Env):
         if self._terminated:
             # Case: Game is finished after the last move
             # Do no step anymore
-            return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, self._rule_settings.export()
+            return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, \
+                   self._rule_settings.to_dict()
 
         if not self._board.get_current_player():
             # Case: Next player is player2
@@ -153,15 +157,16 @@ class TicTacToeEnv(gym.Env):
             # Check if board is now terminated
             self._terminated = self._board.check_terminated()
 
-        return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, self._rule_settings.export()
+        return self._board.get_current(), self._board.get_reward(), self._terminated, self._truncated, \
+               self._rule_settings.to_dict()
 
     def render(self):
-        if self.render_mode == "human":
+        if self._render_mode == "human":
             if self._rule_settings.board_shape[0] > 4 and self._rule_settings.board_shape[1] > 4:
                 raise ValueError("#ERROR_ENV: You can only render the board with a shape of maximal (4, 4)!")
             self._render.init()
             self._render.draw_step(self._board.get_history())
-        elif self.render_mode == "rgb_array":
+        elif self._render_mode == "rgb_array":
             self._render.init()
             return self._render.get_rgb_array(self._board.get_current())
 
