@@ -18,10 +18,6 @@ class RandomPlayer(Player):
     ):
         super().__init__(your_symbol, enemy_symbol, tiles_to_win, player_name, seed)
 
-    @property
-    def name(self) -> str:
-        return self._player_name
-
     def start(self, board: ObsType) -> int:
         # Update turns
         self._turn += 1
