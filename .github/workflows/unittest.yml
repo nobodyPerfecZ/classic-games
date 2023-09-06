@@ -30,3 +30,6 @@ jobs:
       - name: Unittest on sudoku
         run: |
           python -m unittest discover -s tests/sudoku -p "test_*.py"
+      - name: Unittest on snake
+        run: |
+          python -m unittest discover -s tests/snake -p "test_*.py"
