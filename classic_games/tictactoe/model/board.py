@@ -12,11 +12,20 @@ class TicTacToeBoard:
     ):
         """
         Args:
-            board (np.ndarray): matrix of the game state
-            tiles_to_win (int): number of tiles to place in row, column, diagonal, anti-diagonal to win the game. Defaults to 3.
-            your_symbol (int): symbol of your player. Defaults to 1.
-            enemy_symbol (int): symbol of enemy player. Defaults to -1
-            your_start (bool): Your player starts. Defaults to True
+            board (np.ndarray):
+                matrix of the game state
+            tiles_to_win (int):
+                number of tiles to place in row, column, diagonal, anti-diagonal to win the game.
+                Defaults to 3.
+            your_symbol (int):
+                symbol of your player.
+                Defaults to 1.
+            enemy_symbol (int):
+                symbol of enemy player.
+                Defaults to -1
+            your_start (bool):
+                Your player starts.
+                Defaults to True
         """
         assert board.ndim == 2, "#ERROR_BOARD: dimension of board should be (height, width)!"
         assert board.shape[0] == board.shape[1], "#ERROR_BOARD: height and width should be the same!"
@@ -239,7 +248,7 @@ class TicTacToeBoard:
             self._history += [self._board.copy()]
         else:
             # Case: Position is already taken
-            raise ValueError("#ERROR_TICTACTOE: action is invalid!")
+            raise ValueError("#ERROR_TICTACTOEBOARD: action is invalid!")
 
     def get_reward(self) -> float:
         """
@@ -264,7 +273,7 @@ class TicTacToeBoard:
             # Return a reward of 0.0
             return 0.0
         else:
-            raise ValueError("#ERROR_TICTACTOE: Unknown winner state!")
+            raise ValueError("#ERROR_TICTACTOEBOARD: Unknown winner state!")
 
     def __str__(self) -> str:
         return self._board.__str__()
