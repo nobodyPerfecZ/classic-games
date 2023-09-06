@@ -265,3 +265,9 @@ class TicTacToeBoard:
             return 0.0
         else:
             raise ValueError("#ERROR_TICTACTOE: Unknown winner state!")
+
+    def __str__(self) -> str:
+        return self._board.__str__()
+
+    def __repr__(self) -> str:
+        return self._board.__repr__()
