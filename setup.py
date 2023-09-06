@@ -5,8 +5,8 @@ setup(
     version="0.0.1",
     packages=find_packages(
         exclude=[
-            "classic_games.fourwins",
-            "classic_games.fourwins.*",
+            "classic_games.connectfour",
+            "classic_games.connectfour.*",
             "classic_games.sudoku",
             "classic_games.sudoku.*",
             "classic_games.tests",
@@ -16,6 +16,5 @@ setup(
     install_requires=[
         "gymnasium",
         "numpy",
-        "xxhash",
     ],
 )
