@@ -65,6 +65,8 @@ class TestTicTacToeBoard(unittest.TestCase):
         """
         successors = self.board.get_successors()
         self.assertEqual(2, len(successors))
+        self.assertEqual(False, self.board.get_current_player())  # check if current player gets changed
+        self.assertEqual(1, len(self.board.get_history()))  # check if history gets changed
         np.testing.assert_array_equal(np.array([[-1, 1, 0], [1, -1, 1], [-1, 1, -1]]), successors[0])
         np.testing.assert_array_equal(np.array([[0, 1, -1], [1, -1, 1], [-1, 1, -1]]), successors[1])
 

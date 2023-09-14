@@ -122,7 +122,7 @@ class TicTacToeBoard:
         # Check for diagonals with np.diagonal
         # See more information about diagonal in:
         # https://numpy.org/doc/stable/reference/generated/numpy.diagonal.html
-        for i in range(-(self.row - 1), self.col - 1):
+        for i in range(-(self.row - 1), self.col):
             count_player1 = 0
             count_player2 = 0
             for tile in self._board.diagonal(i):
@@ -142,7 +142,7 @@ class TicTacToeBoard:
 
         # Check for anti diagonals
         board = np.rot90(self._board)
-        for i in range(-(self.row - 1), self.col - 1):
+        for i in range(-(self.row - 1), self.col):
             count_player1 = 0
             count_player2 = 0
             for tile in board.diagonal(i):
@@ -191,6 +191,7 @@ class TicTacToeBoard:
             # Reset the board
             self._current_player = not self._current_player
             self._board = board.copy()
+            self._history.pop()
         return successors
 
     def get_history(self) -> list[np.ndarray]:

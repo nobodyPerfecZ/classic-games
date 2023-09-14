@@ -3,6 +3,7 @@ import gymnasium as gym
 import numpy as np
 
 from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer
+from classic_games.tictactoe.agent.random_player import RandomPlayer
 
 
 class TestTicTacToeV0(unittest.TestCase):
@@ -16,7 +17,7 @@ class TestTicTacToeV0(unittest.TestCase):
 
     def setUp(self):
         # Create the tictactoe environment
-        self.env = gym.make("TicTacToe-v0", render_mode="human")
+        self.env = gym.make("TicTacToe-v0", render_mode="human", enemy_player=RandomPlayer)
 
     def tearDown(self):
         # Close the tictactoe environment

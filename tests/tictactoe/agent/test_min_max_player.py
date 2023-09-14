@@ -32,6 +32,12 @@ class TestMinMaxPlayer(unittest.TestCase):
             [0, 0, 0],
         ])
 
+        self.board3 = np.array([
+            [-1, 1, -1],
+            [-1, 1, 0],
+            [0, 0, 1],
+        ])
+
     def test_name(self):
         """
         Tests the property name.
@@ -44,9 +50,11 @@ class TestMinMaxPlayer(unittest.TestCase):
         """
         action1 = self.player.start(self.board)
         action2 = self.player.start(self.board2)
+        action3 = self.player.start(self.board3)
 
         self.assertEqual(4, action1)
         self.assertEqual(5, action2)
+        self.assertEqual(7, action3)
 
     def test_act(self):
         """
@@ -54,9 +62,11 @@ class TestMinMaxPlayer(unittest.TestCase):
         """
         action1 = self.player.act(self.board)  # should call start() first
         action2 = self.player.act(self.board2)  # should now call act()
+        action3 = self.player.act(self.board3)
 
         self.assertEqual(4, action1)
         self.assertEqual(5, action2)
+        self.assertEqual(7, action3)
 
     def test_end(self):
         """

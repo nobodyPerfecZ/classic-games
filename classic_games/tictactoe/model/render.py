@@ -19,14 +19,22 @@ class TicTacToeRender:
     ):
         """
         Args:
-            window_shape (tuple[int, int]): shape of the pygame window/rgb-array in (H, W) format
-            board_shape (tuple[int, int]): shape of the tictactoe board in (H, W) format
-            mode (str): render mode. Can be either "human" or "rgb_array"
-            your_symbol (int): symbol of your player
-            enemy_symbol (int): symbol of enemy player
-            your_color (tuple[int, int, int]): color of your player symbol
-            enemy_color (tuple[int, int, int]): color of enemy player symbol
-            caption (str): caption of the pygame window
+            window_shape (tuple[int, int]):
+                shape of the pygame window/rgb-array in (H, W) format
+            board_shape (tuple[int, int]):
+                shape of the tictactoe board in (H, W) format
+            mode (str):
+                render mode. Can be either "human" or "rgb_array"
+            your_symbol (int):
+                symbol of your player
+            enemy_symbol (int):
+                symbol of enemy player
+            your_color (tuple[int, int, int]):
+                color of your player symbol
+            enemy_color (tuple[int, int, int]):
+                color of enemy player symbol
+            caption (str):
+                caption of the pygame window
         """
         self._window_shape: tuple[int, int] = window_shape
         self._board_shape: tuple[int, int] = board_shape
@@ -146,8 +154,10 @@ class TicTacToeRender:
         Draws the TicTacToe Board as a frame.
 
         Args:
-            board_color (tuple[int, int, int]): color of the lines on the screen in (R, G, B) format
-            thickness (int): thickness of the lines
+            board_color (tuple[int, int, int]):
+                color of the lines on the screen in (R, G, B) format
+            thickness (int):
+                thickness of the lines
         """
         # Draw row lines
         for i in range(1, self.board_height):
@@ -169,9 +179,12 @@ class TicTacToeRender:
         Draws a text as a frame.
 
         Args:
-            text (str): included text
-            text_color (tuple[int, int, int]): color of the text in (R, G, B) format
-            pos (tuple[int, int]): middle position (as pixels) of the text in (H, W) format
+            text (str):
+                included text
+            text_color (tuple[int, int, int]):
+                color of the text in (R, G, B) format
+            pos (tuple[int, int]):
+                middle position (as pixels) of the text in (H, W) format
 
         """
         img = self._font.render(text, True, text_color)
