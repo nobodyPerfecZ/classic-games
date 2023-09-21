@@ -15,7 +15,6 @@ jobs:
     name: Build
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Install g++
         run: |
           choco install mingw -y
@@ -26,7 +25,7 @@ jobs:
         run: |
           g++ -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp -std=c++17
   unittest:
-    name: Unittests
+    name: Unittest
     runs-on: windows-latest
     needs: build
     steps:
