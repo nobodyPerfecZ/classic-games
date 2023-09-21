@@ -31,8 +31,9 @@ jobs:
   job2:
     name: Unittests
     runs-on: windows-latest
-    needs: job2
+    needs: job1
     steps:
+      - uses: actions/checkout@v2
       - name: Unittest on tictactoe
         run: |
           python -m unittest discover -s tests/tictactoe -p "test_*.py"
