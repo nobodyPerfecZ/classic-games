@@ -35,6 +35,7 @@ jobs:
           g++ -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp -std=c++17
   unittest:
     name: Unittests
+    runs-on: windows-latest
     needs: build
     steps:
       - name: Unittest on tictactoe
