@@ -34,7 +34,7 @@ jobs:
       - name: Test
         run: |
           cd D:\a\classic-games\classic-games\classic_games\tictactoe\agent
-          dumpbin /headers min_max.dll
+          objdump -p min_max.dll
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
