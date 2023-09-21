@@ -21,7 +21,6 @@ jobs:
       - name: Install g++
         run: |
           choco install mingw -y --force
-          refreshenv
 
       - name: Compile Min-Max DLL
         run: |
