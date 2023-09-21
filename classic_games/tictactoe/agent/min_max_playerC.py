@@ -6,7 +6,7 @@ import os
 
 from classic_games.tictactoe.agent.abstract_player import Player
 
-MiniMax_lib = ctypes.CDLL(os.path.join(os.getcwd(), r"./classic_games/tictactoe/agent/min_max.so"))
+MiniMax_lib = ctypes.WinDLL(os.path.join(os.getcwd(), r"./classic_games/tictactoe/agent/min_max.dll"))
 
 
 class MiniMaxC:

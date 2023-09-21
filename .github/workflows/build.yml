@@ -17,17 +17,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install Mingw64
-        run: |
-          choco install mingw --x86_64 -y --force
       - name: Compile Min-Max/TicTacToeBoard DLL
         run: |
-          g++ -std=c++17 -shared -o ./classic_games/tictactoe/agent/min_max.so ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
-          g++ -std=c++17 -shared -o ./classic_games/tictactoe/model/board.so ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=c++17 -static -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=c++17 -static -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
       - name: Change File permission DLL
         run: |
-          Set-ItemProperty -Path "./classic_games/tictactoe/agent/min_max.so" -Name "Attributes" -Value ((Get-ItemProperty -Path "./classic_games/tictactoe/agent/min_max.so").Attributes -bOr [System.IO.FileAttributes]::ReadOnly)
-          Set-ItemProperty -Path "./classic_games/tictactoe/model/board.so" -Name "Attributes" -Value ((Get-ItemProperty -Path "./classic_games/tictactoe/model/board.so").Attributes -bOr [System.IO.FileAttributes]::ReadOnly)
+          Set-ItemProperty -Path "./classic_games/tictactoe/agent/min_max.dll" -Name "Attributes" -Value ((Get-ItemProperty -Path "./classic_games/tictactoe/agent/min_max.dll").Attributes -bOr [System.IO.FileAttributes]::ReadOnly)
+          Set-ItemProperty -Path "./classic_games/tictactoe/model/board.dll" -Name "Attributes" -Value ((Get-ItemProperty -Path "./classic_games/tictactoe/model/board.dll").Attributes -bOr [System.IO.FileAttributes]::ReadOnly)
 
       - name: List Workspace Contents
         run: |
@@ -40,7 +37,7 @@ jobs:
       - name: Test
         run: |
           cd D:\a\classic-games\classic-games\classic_games\tictactoe\agent
-          objdump -p min_max.so
+          objdump -p min_max.dll
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
