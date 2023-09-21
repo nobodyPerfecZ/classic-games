@@ -19,10 +19,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Compile Min-Max DLL
         run: |
-          g++ -std=c++17 -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=c++17 -shared -o ./classic_games/tictactoe/agent/min_max.so ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
       - name: Compile TicTacToeBoard DLL
         run: |
-          g++ -std=c++17 -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=c++17 -shared -o ./classic_games/tictactoe/model/board.so ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
       - name: List Workspace Contents
         run: |
           cd ./classic_games/tictactoe/model
@@ -34,7 +34,7 @@ jobs:
       - name: Test
         run: |
           cd D:\a\classic-games\classic-games\classic_games\tictactoe\agent
-          objdump -p min_max.dll
+          objdump -p min_max.so
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
