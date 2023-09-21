@@ -17,16 +17,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
-      - name: Install g++
-        run: |
-          choco install mingw -y --force
       - name: Compile Min-Max DLL
         run: |
-          mingw32-g++.exe -std=c++17 -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=c++17 -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
       - name: Compile TicTacToeBoard DLL
         run: |
-          mingw32-g++.exe -std=c++17 -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=c++17 -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
       - name: Setup Python 3.10
         uses: actions/setup-python@v4
         with:
