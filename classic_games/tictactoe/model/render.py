@@ -1,10 +1,16 @@
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 import pygame
 
 
+def close():
+    """ Closes the pygame window. """
+    pygame.quit()
+
+
 class TicTacToeRender:
+    """ Class represents a Renderer object, to render a tictactoe game. """
 
     def __init__(
             self,
@@ -19,56 +25,50 @@ class TicTacToeRender:
     ):
         """
         Args:
-            window_shape (tuple[int, int]):
-                shape of the pygame window/rgb-array in (H, W) format
-            board_shape (tuple[int, int]):
-                shape of the tictactoe board in (H, W) format
-            mode (str):
-                render mode. Can be either "human" or "rgb_array"
-            your_symbol (int):
-                symbol of your player
-            enemy_symbol (int):
-                symbol of enemy player
-            your_color (tuple[int, int, int]):
-                color of your player symbol
-            enemy_color (tuple[int, int, int]):
-                color of enemy player symbol
-            caption (str):
-                caption of the pygame window
+            window_shape (tuple[int, int]): shape of the pygame window/rgb-array in (H, W) format
+            board_shape (tuple[int, int]): shape of the tictactoe board in (H, W) format
+            mode (str): render mode. Can be either "human" or "rgb_array"
+            your_symbol (int): symbol of your player
+            enemy_symbol (int): symbol of enemy player
+            your_color (tuple[int, int, int]): color of your player symbol
+            enemy_color (tuple[int, int, int]): color of enemy player symbol
+            caption (str): caption of the pygame window
         """
         self._window_shape: tuple[int, int] = window_shape
         self._board_shape: tuple[int, int] = board_shape
         self._mode: str = mode
         self._your_symbol: int = your_symbol
         self._enemy_symbol: int = enemy_symbol
-        self._your_color: int = your_color
-        self._enemy_color: int = enemy_color
+        self._your_color: tuple[int, int, int] = your_color
+        self._enemy_color: tuple[int, int, int] = enemy_color
         self._caption: str = caption
 
         self._screen: Union[pygame.display, pygame.Surface] = None
-        self._clock: pygame.time.Clock = None
+        self._clock: Optional[pygame.time.Clock] = None
         self._font: pygame.font = None
 
     @property
     def window_height(self) -> int:
+        """ Returns the height of the pygame window. """
         return self._window_shape[0]
 
     @property
     def window_width(self) -> int:
+        """ Returns the width of the pygame window. """
         return self._window_shape[1]
 
     @property
     def board_height(self) -> int:
+        """ Returns the number of rows of the tictactoe board. """
         return self._board_shape[0]
 
     @property
     def board_width(self) -> int:
+        """ Returns the number of columns of the tictactoe board. """
         return self._board_shape[1]
 
     def init(self):
-        """
-        Initialize the pygame objects, to render the frames.
-        """
+        """ Initialize the pygame objects, to render the frames. """
         pygame.init()
         pygame.display.set_caption(self._caption)
 
@@ -82,10 +82,9 @@ class TicTacToeRender:
         self._clock = pygame.time.Clock()
         self._font = pygame.font.SysFont("Arial", 100)
 
-    def close(self):
-        """
-        Closes the pygame window.
-        """
+    @staticmethod
+    def close():
+        """ Closes the pygame window. """
         pygame.quit()
 
     def get_rgb_array(self, board: np.ndarray) -> np.ndarray:
@@ -129,35 +128,34 @@ class TicTacToeRender:
             board (np.ndarray): history of all previous states
         """
         # Draw the board
-        self._draw_board((0, 0, 0), 10)
+        self._draw_board((10, 10, 10), 10)
 
         # Get the middle position of each area in the screen
+        index = -1
         for i in range(1, 2 * self.board_height + 1, 2):
             for j in range(1, 2 * self.board_width + 1, 2):
+                index += 1
+                pos = (i*self.window_height // (self.board_height*2), j*self.window_width // (self.board_height*2))
+
                 if board[i // 2, j // 2] == self._your_symbol:
                     symbol, text_color = "X", self._your_color
                 elif board[i // 2, j // 2] == self._enemy_symbol:
                     symbol, text_color = "O", self._enemy_color
                 else:
+                    # Case: Draw the index of the empty tiles
+                    self._draw_text(str(index), (10, 10, 10), pos, 50)
                     continue
-                # Draw each tile of the board
-                self._draw_text(symbol, text_color, (
-                    i * self.window_height // (self.board_height * 2),
-                    j * self.window_width // (self.board_height * 2)))
 
-    def _draw_board(
-            self,
-            board_color: tuple[int, int, int],  # in (R, G, B) format
-            thickness: int,
-    ):
+                # Draw each tile of the board
+                self._draw_text(symbol, text_color, pos, 255)
+
+    def _draw_board(self, board_color: tuple[int, int, int], thickness: int):
         """
         Draws the TicTacToe Board as a frame.
 
         Args:
-            board_color (tuple[int, int, int]):
-                color of the lines on the screen in (R, G, B) format
-            thickness (int):
-                thickness of the lines
+            board_color (tuple[int, int, int]): color of the lines on the screen in (R, G, B) format
+            thickness (int): thickness of the lines
         """
         # Draw row lines
         for i in range(1, self.board_height):
@@ -169,24 +167,17 @@ class TicTacToeRender:
             pygame.draw.line(self._screen, board_color, (i * self.window_width / self.board_width, 0),
                              (i * self.window_width / self.board_width, self.window_height), thickness)
 
-    def _draw_text(
-            self,
-            text: str,
-            text_color: tuple[int, int, int],  # in (R, G, B) format
-            pos: tuple[int, int],  # in (H, W) format
-    ):
+    def _draw_text(self, text: str, text_color: tuple[int, int, int], pos: tuple[int, int], alpha: int):
         """
         Draws a text as a frame.
 
         Args:
-            text (str):
-                included text
-            text_color (tuple[int, int, int]):
-                color of the text in (R, G, B) format
-            pos (tuple[int, int]):
-                middle position (as pixels) of the text in (H, W) format
-
+            text (str): included text
+            text_color (tuple[int, int, int]): color of the text in (R, G, B) format
+            pos (tuple[int, int]): middle position (as pixels) of the text in (H, W) format
+            alpha (int): controls the transparency of the text
         """
         img = self._font.render(text, True, text_color)
+        img.set_alpha(alpha)
         center_pos = (pos[1] - img.get_width() // 2, pos[0] - img.get_height() // 2)
         self._screen.blit(img, center_pos)

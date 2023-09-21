@@ -79,7 +79,7 @@ class Player(ABC):
         self._seed(seed)  # set the random number to the given seed
 
     @abstractmethod
-    def start(self, board: ObsType) -> int:
+    def start(self, board: ObsType) -> Optional[int]:
         """
         First move to take.
 
@@ -92,7 +92,7 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def act(self, board: ObsType) -> int:
+    def act(self, board: ObsType) -> Optional[int]:
         """
         Returns the action of the player for the 2, ..., n turns.
 
@@ -105,7 +105,7 @@ class Player(ABC):
         pass
 
     @abstractmethod
-    def end(self, board: ObsType) -> int:
+    def end(self, board: ObsType) -> Optional[int]:
         """
         Returns the action of the player after the last turn.
 

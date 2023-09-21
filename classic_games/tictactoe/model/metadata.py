@@ -4,19 +4,10 @@ from dataclasses import dataclass, asdict, field
 @dataclass(frozen=True)
 class Metadata:
     """
-    Args:
-        board_shape (tuple[int, int]):
-            shape of the matrix.
-            Defaults to (3, 3)
-        tiles_to_win (int):
-            number of tiles to place in row, column, diagonal, anti-diagonal to win the game.
-            Defaults to 3.
-        your_symbol (int):
-            symbol of your player.
-            Defaults to 1.
-        enemy_symbol (int):
-            symbol of enemy player.
-            Defaults to -1
+    board_shape (tuple[int, int]): shape of the matrix
+    tiles_to_win (int): number of tiles to place in row, column, diagonal, anti-diagonal to win the game
+    your_symbol (int): symbol of your player
+    enemy_symbol (int): symbol of enemy player
     """
     board_shape: tuple[int, int] = (3, 3)
     tiles_to_win: int = 3
@@ -27,6 +18,7 @@ class Metadata:
 
     def to_dict(self) -> dict:
         """
-        Returns the dictionary representation of the dataclass.
+        Returns:
+            dict: dictionary representation of the dataclass.
         """
         return asdict(self)

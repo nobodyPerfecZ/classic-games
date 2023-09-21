@@ -1,7 +1,6 @@
 from typing import Optional
-
-import numpy as np
 from gymnasium.core import ObsType
+import numpy as np
 
 from classic_games.tictactoe.agent.abstract_player import Player
 from classic_games.tictactoe.model.board import TicTacToeBoard
@@ -12,18 +11,16 @@ class MiniMax:
     Implements the Mini-Max algorithm with alpha/beta pruning.
     """
 
-    # TODO: Implement MinMax Algorithm in C++ (to make it much faster!!!)
-
-    def __init__(self, your_symbol: int, enemy_symbol: int, tiles_to_win: int):
+    def __init__(self, your_symbol: int, enemy_symbol: int, tiles_to_win: int, max_depth: int = np.inf):
         """
         Args:
-            your_symbol (int):
-                symbol of your player
-            enemy_symbol (int):
-                symbol of enemy player
-            tiles_to_win (int):
-                number of tiles to be in row/col/diagonal/anti-diagonal to win the game
+            your_symbol (int): symbol of your player
+            enemy_symbol (int): symbol of enemy player
+            tiles_to_win (int): number of tiles to be in row/col/diagonal/anti-diagonal to win the game
+            max_depth (int): maximal depth for the minimax algorithm
         """
+        assert max_depth >= 1, "#ERROR_MINIMAX: max_depth should be higher or equal to 1!"
+
         # cache variable to safe for each hash(state) := (reward, best action)
         self._cache: dict[str, tuple[float, int]] = {}
         self._your_start: bool = True
@@ -33,6 +30,7 @@ class MiniMax:
         self._your_symbol: int = your_symbol
         self._enemy_symbol: int = enemy_symbol
         self._tiles_to_win: int = tiles_to_win
+        self._max_depth: int = max_depth
 
     def _reset(self):
         """
@@ -91,7 +89,17 @@ class MiniMax:
         )
 
         if state.check_terminated():
+            # Case: Game is finished
             reward = state.get_reward() * (2 * (board.shape[0] * board.shape[1]) - self._depth)
+            return reward, -1  # (reward, action)
+        elif self._depth == self._max_depth:
+            # Case: Max depth is reached
+            # Use features as rewards
+            if self._your_start:
+                reward = state.get_immediate_winning_moves() - state.get_immediate_blocking_moves() - self._depth
+            else:
+                reward = state.get_immediate_winning_moves() - state.get_immediate_blocking_moves() + self._depth
+            # reward = state.get_reward() * (2 * (board.shape[0] * board.shape[1]) - self._depth)
             return reward, -1  # (reward, action)
         elif self._your_start:
             # Case: Max player makes a turn
@@ -195,13 +203,15 @@ class MinMaxPlayer(Player):
             enemy_symbol: int,
             tiles_to_win: int,
             player_name: str = "MinMax Player",
-            seed: Optional[int] = None
+            seed: Optional[int] = None,
+            max_depth: Optional[int] = np.inf,
     ):
         super().__init__(your_symbol, enemy_symbol, tiles_to_win, player_name, seed)
         self._minimax = MiniMax(
             your_symbol=your_symbol,
             enemy_symbol=enemy_symbol,
-            tiles_to_win=tiles_to_win
+            tiles_to_win=tiles_to_win,
+            max_depth=max_depth,
         )
 
     def start(self, board: ObsType) -> int:

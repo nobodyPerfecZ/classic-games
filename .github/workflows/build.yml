@@ -1,6 +1,9 @@
-name: Unittest
+name: Build
 
-on: [push]
+on:
+  push:
+    branches:
+      - master  # Adjust the branch as needed
 
 permissions:
   checks: write
@@ -9,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Autograding
+    name: Build
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,6 +24,19 @@ jobs:
         uses: py-actions/py-dependency-install@v4
         with:
           path: "requirements.txt"
+      - name: Install g++
+        run: |
+          choco install mingw -y
+      - name: Build Min-Max with g++
+        run: |
+          g++ -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp -std=c++17
+      - name: Build TicTacToeBoard with g++
+        run: |
+          g++ -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp -std=c++17
+  unittest:
+    name: Unittests
+    needs: build
+    steps:
       - name: Unittest on tictactoe
         run: |
           python -m unittest discover -s tests/tictactoe -p "test_*.py"

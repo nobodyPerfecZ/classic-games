@@ -1,50 +1,71 @@
 import unittest
 import numpy as np
 
-from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer, MiniMax
+from classic_games.tictactoe.agent.min_max_playerC import MiniMaxC, MinMaxPlayerC
 
 
-class TestMiniMax(unittest.TestCase):
+class TestMiniMaxC(unittest.TestCase):
     """
-    Tests the class MiniMax.
+    Tests the class MiniMaxC.
     """
 
     def setUp(self):
-        self.empty_board = np.array([
+        self.empty_board3x3 = np.array([
             [0, 0, 0],
             [0, 0, 0],
             [0, 0, 0],
         ])
-        self.board = np.array([
+        self.board3x3 = np.array([
             [-1, 1, -1],
             [-1, 1, 0],
             [0, 0, 1],
         ])
-        self.minimax = MiniMax(
+        self.empty_board4x4 = np.array([
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+        ])
+        self.board4x4 = np.array([
+            [-1, 1, -1, 0],
+            [-1, 1, 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 1, 0],
+        ])
+
+        self.minimax3x3 = MiniMaxC(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
         )
+        self.minimax4x4 = MiniMaxC(
+            your_symbol=1,
+            enemy_symbol=-1,
+            tiles_to_win=4,
+            max_depth=8,
+        )
 
-    def test_get_action(self):
+    def test_get_best_action(self):
         """
         Tests the method get_best_action().
         """
-        self.assertEqual(0, self.minimax.get_best_action(self.empty_board))
-        self.assertEqual(7, self.minimax.get_best_action(self.board))
+        self.assertEqual(0, self.minimax3x3.get_best_action(self.empty_board3x3))
+        self.assertEqual(7, self.minimax3x3.get_best_action(self.board3x3))
+
+        self.assertEqual(0, self.minimax4x4.get_best_action(self.empty_board4x4))
+        self.assertEqual(3, self.minimax4x4.get_best_action(self.board4x4))
 
 
-class TestMinMaxPlayer(unittest.TestCase):
+class TestMinMaxPlayerC(unittest.TestCase):
     """
-    Tests the class MinMaxPlayer.
+    Tests the class MinMaxPlayerC.
     """
 
     def setUp(self):
-        self.player = MinMaxPlayer(
+        self.player = MinMaxPlayerC(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
-            seed=0
         )
 
         # Current board state
@@ -104,5 +125,5 @@ class TestMinMaxPlayer(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

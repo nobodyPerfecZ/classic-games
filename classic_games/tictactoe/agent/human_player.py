@@ -17,7 +17,7 @@ class HumanPlayer(Player):
     ):
         super().__init__(your_symbol, enemy_symbol, tiles_to_win, player_name, seed)
 
-    def start(self, board: ObsType) -> int:
+    def start(self, board: ObsType) -> Optional[int]:
         # Update turns
         self._turn += 1
 
@@ -42,8 +42,7 @@ class HumanPlayer(Player):
                 print("Invalid input. Please enter a valid number.")
         return action
 
-    def act(self, board: ObsType) -> int:
-        # TODO: Implement here
+    def act(self, board: ObsType) -> Optional[int]:
         if self._turn == 0:
             return self.start(board)
         else:
@@ -71,5 +70,5 @@ class HumanPlayer(Player):
                     print("Invalid input. Please enter a valid number.")
             return action
 
-    def end(self, board: ObsType) -> int:
+    def end(self, board: ObsType) -> Optional[int]:
         pass

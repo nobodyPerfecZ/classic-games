@@ -12,20 +12,11 @@ class TicTacToeBoard:
     ):
         """
         Args:
-            board (np.ndarray):
-                matrix of the game state
-            tiles_to_win (int):
-                number of tiles to place in row, column, diagonal, anti-diagonal to win the game.
-                Defaults to 3.
-            your_symbol (int):
-                symbol of your player.
-                Defaults to 1.
-            enemy_symbol (int):
-                symbol of enemy player.
-                Defaults to -1
-            your_start (bool):
-                Your player starts.
-                Defaults to True
+            board (np.ndarray): matrix of the game state
+            tiles_to_win (int): number of tiles to place in row, column, diagonal, anti-diagonal to win the game
+            your_symbol (int): symbol of your player
+            enemy_symbol (int): symbol of enemy player
+            your_start (bool): Your player starts
         """
         assert board.ndim == 2, "#ERROR_BOARD: dimension of board should be (height, width)!"
         assert board.shape[0] == board.shape[1], "#ERROR_BOARD: height and width should be the same!"
@@ -45,11 +36,78 @@ class TicTacToeBoard:
 
     @property
     def row(self):
+        """ Returns the first dimension of the board """
         return self._board.shape[0]
 
     @property
     def col(self):
+        """ Returns the second dimension of the board """
         return self._board.shape[1]
+
+    def _winning_move(self, pos: tuple, your_symbol: bool) -> bool:
+        """
+        Checks if the given player have n tiles on the row, column, diagonal or anti-diagonal for the given position.
+
+        Args:
+            pos (tuple): position of the board (row, col)
+            your_symbol (bool): Should it be checked for your player (:= True) or for the enemy (:= False).
+
+        Returns:
+            bool: True, if we have n tiles in the row, column diagonal or anti-diagonal
+        """
+        assert len(pos) == 2, "#ERROR_TICTACTOEBOARD: pos should be a tuple in form (row, col)!"
+        assert 0 <= pos[0] < self._board.shape[0], "#ERROR_TICTACTOEBOARD: row is out of bounds!"
+        assert 0 <= pos[1] < self._board.shape[1], "#ERROR_TICTACTOEBOARD: col is out of bounds!"
+
+        row, col = pos
+        symbol = self._your_symbol if your_symbol else self._enemy_symbol
+
+        # Check for rows
+        count = 0
+        for c in range(self.col):
+            tile = self._board[row, c]
+            if tile == symbol:
+                count += 1
+            else:
+                count = 0
+            if count >= self._tiles_to_win:
+                return True
+
+        # Check for columns
+        count = 0
+        for r in range(self.row):
+            tile = self._board[r, col]
+            if tile == symbol:
+                count += 1
+            else:
+                count = 0
+            if count >= self._tiles_to_win:
+                return True
+
+        # Check for diagonals
+        count = 0
+        r, c = row - min(row, col), col - min(row, col)
+        for i in range(min(self.row - r, self.col - c)):
+            tile = self._board[r + i, c + i]
+            if tile == symbol:
+                count += 1
+            else:
+                count = 0
+            if count >= self._tiles_to_win:
+                return True
+
+        # Check for anti-diagonals
+        count = 0
+        r, c = row - min(row, self.col - 1 - col), col + min(row, self.col - 1 - col)
+        for i in range(abs(r - c) + 1):
+            tile = self._board[r + i, c - i]
+            if tile == symbol:
+                count += 1
+            else:
+                count = 0
+            if count >= self._tiles_to_win:
+                return True
+        return False
 
     def check_terminated(self) -> bool:
         """
@@ -71,95 +129,20 @@ class TicTacToeBoard:
         Returns the winner of the current board.
 
         Returns:
-            int: 0 - no winner, your_symbol - your player wins, enemy_symbol - enemy player wins
+            int: 
+                0 := no winner
+                your_symbol :=  your player wins
+                enemy_symbol := enemy player wins
         """
-        # Check for rows
-        for row in range(self.row):
-            count_player1 = 0
-            count_player2 = 0
-            for col in range(self.col):
-                tile = self._board[row, col]
-                if tile == self._your_symbol:
-                    count_player1 += 1
-                    count_player2 = 0
-                elif tile == self._enemy_symbol:
-                    count_player1 = 0
-                    count_player2 += 1
-                else:
-                    count_player1 = 0
-                    count_player2 = 0
-
-                if count_player1 >= self._tiles_to_win:
-                    # Case: Player1 has won the game
+        for i in range(self.row):
+            for j in range(self.col):
+                if self._winning_move((i, j), your_symbol=True):
+                    # Case: Your player won
                     return self._your_symbol
-                elif count_player2 >= self._tiles_to_win:
-                    # Case: Player2 has won the game
+                elif self._winning_move((i, j), your_symbol=False):
+                    # Case: Enemy player won
                     return self._enemy_symbol
-
-        # Check for columns
-        for col in range(self.col):
-            count_player1 = 0
-            count_player2 = 0
-            for row in range(self.row):
-                tile = self._board[row, col]
-                if tile == self._your_symbol:
-                    count_player1 += 1
-                    count_player2 = 0
-                elif tile == self._enemy_symbol:
-                    count_player1 = 0
-                    count_player2 += 1
-                else:
-                    count_player1 = 0
-                    count_player2 = 0
-
-                if count_player1 >= self._tiles_to_win:
-                    # Case: Player1 has won the game
-                    return self._your_symbol
-                elif count_player2 >= self._tiles_to_win:
-                    # Case: Player2 has won the game
-                    return self._enemy_symbol
-
-        # Check for diagonals with np.diagonal
-        # See more information about diagonal in:
-        # https://numpy.org/doc/stable/reference/generated/numpy.diagonal.html
-        for i in range(-(self.row - 1), self.col):
-            count_player1 = 0
-            count_player2 = 0
-            for tile in self._board.diagonal(i):
-                if tile == self._your_symbol:
-                    count_player1 += 1
-                    count_player2 = 0
-                elif tile == self._enemy_symbol:
-                    count_player1 = 0
-                    count_player2 += 1
-
-                if count_player1 >= self._tiles_to_win:
-                    # Case: Player1 has won the game
-                    return self._your_symbol
-                elif count_player2 >= self._tiles_to_win:
-                    # Case: Player2 has won the game
-                    return self._enemy_symbol
-
-        # Check for anti diagonals
-        board = np.rot90(self._board)
-        for i in range(-(self.row - 1), self.col):
-            count_player1 = 0
-            count_player2 = 0
-            for tile in board.diagonal(i):
-                if tile == self._your_symbol:
-                    count_player1 += 1
-                    count_player2 = 0
-                elif tile == self._enemy_symbol:
-                    count_player1 = 0
-                    count_player2 += 1
-
-                if count_player1 >= self._tiles_to_win:
-                    # Case: Player1 won the game
-                    return self._your_symbol
-                elif count_player2 >= self._tiles_to_win:
-                    # Case: Player2 won the game
-                    return self._enemy_symbol
-        # Case: Nobody won the game
+        # Case: Nobody won
         return 0
 
     def get_current(self) -> np.ndarray:
@@ -275,6 +258,47 @@ class TicTacToeBoard:
             return 0.0
         else:
             raise ValueError("#ERROR_TICTACTOEBOARD: Unknown winner state!")
+
+    ### Feature-specific methods ###
+    def get_immediate_winning_moves(self) -> int:
+        """
+        Returns:
+            int: number of tiles, where an immediate move (next turn) refers to a win for your player.
+        """
+        winning_moves = 0
+        for i in range(self.row):
+            for j in range(self.col):
+                if self._board[i, j] == 0:
+                    # Case: Check if you would win if you place your symbol on this tile
+                    self._board[i, j] = self._your_symbol
+
+                    if self._winning_move((i, j), your_symbol=True):
+                        # Case: Your player won
+                        winning_moves += 1
+
+                    # Reset the move
+                    self._board[i, j] = 0
+        return winning_moves
+
+    def get_immediate_blocking_moves(self) -> int:
+        """
+        Returns:
+            int: number of tiles, where an immediate move (next turn) refers to a block for a win of the enemy player.
+        """
+        blocking_moves = 0
+        for i in range(self.row):
+            for j in range(self.col):
+                if self._board[i, j] == 0:
+                    # Case: Check if you would win if you place your symbol on this tile
+                    self._board[i, j] = self._enemy_symbol
+
+                    if self._winning_move((i, j), your_symbol=False):
+                        # Case: Enemy player won
+                        blocking_moves += 1
+
+                    # Reset the move
+                    self._board[i, j] = 0
+        return blocking_moves
 
     def __str__(self) -> str:
         return self._board.__str__()

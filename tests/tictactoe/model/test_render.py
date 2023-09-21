@@ -1,5 +1,4 @@
 import unittest
-
 import numpy as np
 
 from classic_games.tictactoe.model.render import TicTacToeRender

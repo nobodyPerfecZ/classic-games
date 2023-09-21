@@ -3,7 +3,9 @@ import gymnasium as gym
 import numpy as np
 
 from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer
+from classic_games.tictactoe.agent.min_max_playerC import MinMaxPlayerC
 from classic_games.tictactoe.agent.random_player import RandomPlayer
+from classic_games.tictactoe.model.metadata import Metadata
 
 
 class TestTicTacToeV0(unittest.TestCase):
@@ -17,7 +19,10 @@ class TestTicTacToeV0(unittest.TestCase):
 
     def setUp(self):
         # Create the tictactoe environment
-        self.env = gym.make("TicTacToe-v0", render_mode="human", enemy_player=RandomPlayer)
+        self.metadata = Metadata(board_shape=(3, 3), tiles_to_win=3)
+        self.enemy_player = RandomPlayer(your_symbol=-1, enemy_symbol=1, tiles_to_win=3, seed=0)
+        self.env = gym.make("TicTacToe-v0", render_mode="human", rule_settings=self.metadata,
+                            enemy_player=self.enemy_player)
 
     def tearDown(self):
         # Close the tictactoe environment
@@ -43,7 +48,7 @@ class TestTicTacToeV0(unittest.TestCase):
         Tests the method step().
         """
         observation, info = self.env.reset(seed=10)
-        your_player = MinMaxPlayer(
+        your_player = MinMaxPlayerC(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
@@ -89,12 +94,13 @@ class TestTicTacToeV0(unittest.TestCase):
         """
         # Perform actions and render frames
         observation, info = self.env.reset(seed=0)
-        your_player = MinMaxPlayer(
+        your_player = MinMaxPlayerC(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
-            seed=0
+            seed=0,
         )
+
         for _ in range(5):
             action = your_player.act(observation)
             observation, reward, terminated, truncated, info = self.env.step(action)
@@ -108,12 +114,15 @@ class TestTicTacToeV0(unittest.TestCase):
         Tests to run one episode
         """
         observation, info = self.env.reset(seed=0)
-        your_player = MinMaxPlayer(
+        your_player = MinMaxPlayerC(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
             seed=0
         )
+        reward = 0.0
+        terminated = False
+        truncated = False
         for _ in range(5):
             action = your_player.act(observation)
             observation, reward, terminated, truncated, info = self.env.step(action)
@@ -145,6 +154,7 @@ class TestTicTacToeV0(unittest.TestCase):
             observation, info = self.env.reset(seed=0)
             your_player.reset(seed=0)
 
+            reward = 0.0
             for _ in range(5):
                 action = your_player.act(observation)
                 observation, reward, terminated, truncated, info = self.env.step(action)
