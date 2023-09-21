@@ -16,14 +16,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - name: Install dependencies
-        uses: py-actions/py-dependency-install@v4
-        with:
-          path: "requirements.txt"
       - name: Install g++
         run: |
           choco install mingw -y
@@ -38,6 +30,14 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - name: Install dependencies in Python
+        uses: py-actions/py-dependency-install@v4
+        with:
+          path: "requirements.txt"
       - name: Unittest on tictactoe
         run: |
           python -m unittest discover -s tests/tictactoe -p "test_*.py"
