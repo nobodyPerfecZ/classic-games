@@ -14,7 +14,9 @@ jobs:
   build:
     name: Build
     runs-on: windows-latest
+
     steps:
+      - uses: actions/checkout@v2
       - name: Install g++
         run: |
           choco install mingw -y
@@ -29,6 +31,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     steps:
+      - uses: actions/checkout@v2
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
