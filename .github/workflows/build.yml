@@ -11,13 +11,12 @@ permissions:
   contents: read
 
 jobs:
-  job:
-    name: Build + Unittests
+  job1:
+    name: Build
     runs-on: windows-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Compile Min-Max/TicTacToeBoard DLL
+      - name: Compile DLL files
         run: |
           g++ -std=c++17 -static -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
           g++ -std=c++17 -static -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
@@ -29,6 +28,11 @@ jobs:
         uses: py-actions/py-dependency-install@v4
         with:
           path: "requirements.txt"
+  job2:
+    name: Unittests
+    runs-on: windows-latest
+    needs: job2
+    steps:
       - name: Unittest on tictactoe
         run: |
           python -m unittest discover -s tests/tictactoe -p "test_*.py"
