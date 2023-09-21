@@ -21,7 +21,7 @@ jobs:
       - name: Install g++
         run: |
           choco install mingw -y
-          export PATH=$PATH:"/c/MinGW/bin"
+          export PATH=${PATH}:"/c/MinGW/bin"
 
       - name: Compile Min-Max DLL
         run: |
