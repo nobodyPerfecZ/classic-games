@@ -1,7 +1,8 @@
 import numpy as np
 import ctypes
+import os
 
-TicTacToe_lib = ctypes.CDLL(r"./classic_games/tictactoe/model/board.dll")
+TicTacToe_lib = ctypes.CDLL(os.path.join(os.getcwd(), r"./classic_games/tictactoe/model/board.dll"))
 
 
 class TicTacToeBoardC:

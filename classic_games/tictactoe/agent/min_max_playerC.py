@@ -2,10 +2,11 @@ from typing import Optional
 from gymnasium.core import ObsType
 import numpy as np
 import ctypes
+import os
 
 from classic_games.tictactoe.agent.abstract_player import Player
 
-MiniMax_lib = ctypes.CDLL(r"./classic_games/tictactoe/agent/min_max.dll")
+MiniMax_lib = ctypes.CDLL(os.path.join(os.getcwd(), r"./classic_games/tictactoe/agent/min_max.dll"))
 
 
 class MiniMaxC:
