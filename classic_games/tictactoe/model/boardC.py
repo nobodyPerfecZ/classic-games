@@ -1,7 +1,7 @@
 import numpy as np
 import ctypes
 
-TicTacToe_lib = ctypes.WinDLL("./classic_games/tictactoe/model/board.dll")
+TicTacToe_lib = ctypes.CDLL(r"./classic_games/tictactoe/model/board.dll")
 
 
 class TicTacToeBoardC:

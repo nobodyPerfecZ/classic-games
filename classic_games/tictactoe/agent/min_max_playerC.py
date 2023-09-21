@@ -5,7 +5,7 @@ import ctypes
 
 from classic_games.tictactoe.agent.abstract_player import Player
 
-MiniMax_lib = ctypes.WinDLL("./classic_games/tictactoe/agent/min_max.dll")
+MiniMax_lib = ctypes.CDLL(r"./classic_games/tictactoe/agent/min_max.dll")
 
 
 class MiniMaxC:
