@@ -17,6 +17,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Install Mingw64
+        uses: mattn/setup-mysys@v2
       - name: Compile Min-Max DLL
         run: |
           g++ -std=c++17 -shared -o ./classic_games/tictactoe/agent/min_max.so ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
