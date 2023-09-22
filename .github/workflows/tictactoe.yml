@@ -2,7 +2,7 @@ name: Build & Test TicTacToe
 
 on:
   push:
-    paths: ["classic_games/tictactoe/**", "classic_games/util/**", "tests/tictactoe**"]
+    paths: ["classic_games/tictactoe/**", "classic_games/util/**", "tests/tictactoe/**"]
 
 jobs:
   job:
@@ -12,6 +12,7 @@ jobs:
         python-version: ["3.10"]
         c-plus-version: ["c++17"]
 
+    name: Build & Test TicTacToe on Python ${{ matrix.python-version }} and {{ matrix.c-plus-version }}
     steps:
       - uses: actions/checkout@v2
       - name: Compile DLL files with ${{ matrix.c-plus-version }}
