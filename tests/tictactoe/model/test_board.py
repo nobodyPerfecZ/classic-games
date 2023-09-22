@@ -85,7 +85,8 @@ class TestTicTacToeBoard(unittest.TestCase):
         Tests the method get_current().
         """
         np.testing.assert_array_equal(np.array([[0, 1, 0], [1, -1, 1], [-1, 1, -1]]), self.board3x3.get_current())
-        np.testing.assert_array_equal(np.array([[1, 1, 1], [1, -1, 1], [-1, 1, -1]]), self.terminated_board3x3.get_current())
+        np.testing.assert_array_equal(np.array([[1, 1, 1], [1, -1, 1], [-1, 1, -1]]),
+                                      self.terminated_board3x3.get_current())
 
     def test_get_successors(self):
         """
