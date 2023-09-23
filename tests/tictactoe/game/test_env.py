@@ -2,7 +2,6 @@ import unittest
 import gymnasium as gym
 import numpy as np
 
-from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer
 from classic_games.tictactoe.agent.min_max_playerC import MinMaxPlayerC
 from classic_games.tictactoe.agent.random_player import RandomPlayer
 from classic_games.tictactoe.model.metadata import Metadata
@@ -144,7 +143,7 @@ class TestTicTacToeV0(unittest.TestCase):
         Tests to run a gym loop.
         """
         rewards = 0.0
-        your_player = MinMaxPlayer(
+        your_player = MinMaxPlayerC(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,

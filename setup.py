@@ -18,3 +18,8 @@ setup(
         "numpy",
     ],
 )
+
+# setup(
+#     name="MiniMax",
+#     ext_modules=cythonize("./classic_games/tictactoe/agent/min_max_player.pyx"),
+# )

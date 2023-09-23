@@ -2,7 +2,7 @@ from typing import Optional
 from gymnasium.core import ObsType
 
 from classic_games.tictactoe.agent.abstract_player import Player
-from classic_games.tictactoe.model.board import TicTacToeBoard
+from classic_games.tictactoe.model.boardC import TicTacToeBoardC
 
 
 class HumanPlayer(Player):
@@ -21,7 +21,7 @@ class HumanPlayer(Player):
         # Update turns
         self._turn += 1
 
-        state = TicTacToeBoard(board)
+        state = TicTacToeBoardC(board)
         actions = state.get_actions()
 
         if not actions:
@@ -49,7 +49,7 @@ class HumanPlayer(Player):
             # Update turns
             self._turn += 1
 
-            state = TicTacToeBoard(board)
+            state = TicTacToeBoardC(board)
             actions = state.get_actions()
 
             if not actions:
