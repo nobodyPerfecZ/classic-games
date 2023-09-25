@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Compile DLL files with ${{ matrix.c-plus-version }}
         run: |
-          g++ -std=${{ matrix.c-plus-version }} -static -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
+          g++ -std=${{ matrix.c-plus-version }} -static -shared -o ./classic_games/tictactoe/agent/min_max.dll ./classic_games/tictactoe/agent/min_max.cpp ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp ./classic_games/util/hasher.cpp
           g++ -std=${{ matrix.c-plus-version }} -static -shared -o ./classic_games/tictactoe/model/board.dll ./classic_games/tictactoe/model/board.cpp ./classic_games/util/converter.cpp
       - name: Setup Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4

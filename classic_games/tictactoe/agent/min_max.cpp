@@ -126,7 +126,7 @@ std::tuple<float, int> MiniMax::min(std::vector<std::vector<int>> board) {
 }
 
 MiniMax::MiniMax(int your_symbol, int enemy_symbol, int tiles_to_win, int max_depth) {
-    this->cache = {};
+    this->cache = std::unordered_map<std::vector<std::vector<int>>, std::tuple<float, int>, decltype(&Hasher::matrix_hash)>(10, Hasher::matrix_hash);
     this->your_start = true;
     this->depth = 0;
     this->alpha = -std::numeric_limits<float>::infinity();
@@ -138,11 +138,24 @@ MiniMax::MiniMax(int your_symbol, int enemy_symbol, int tiles_to_win, int max_de
 }
 
 int MiniMax::get_best_action(std::vector<std::vector<int>> board) {
+    if (this->cache.count(board) > 0) {
+        // Case: Board state was already evaluated
+        std::tuple<float, int> result = this->cache[board];
+        float reward = std::get<0>(result);
+        int action = std::get<1>(result);
+        return action;
+    }
+
     // Reset the parameters
     this->reset();
 
     // Perform the minimax algorithm (with alpha-beta pruning)
     std::tuple<float, int> result = this->minimax(board);
+    
+    // Safe the results in the cache
+    this->cache[board] = result;
+
+    // Return the action
     float reward = std::get<0>(result);
     int action = std::get<1>(result);
     return action;

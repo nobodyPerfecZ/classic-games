@@ -1,14 +1,15 @@
 #ifndef MINMAX_H
 #define MINMAX_H
 
+#include "../../util/hasher.h"
 #include <vector>
 #include <tuple>
-#include <map>
+#include <unordered_map>
 #include <limits>
 
 class MiniMax {
     private:
-        std::map<int, std::tuple<float, int>> cache = {};
+        std::unordered_map<std::vector<std::vector<int>>, std::tuple<float, int>, decltype(&Hasher::matrix_hash)> cache;
         bool your_start = true;
         int depth = 0;
         float alpha = -std::numeric_limits<float>::infinity();

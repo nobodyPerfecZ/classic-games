@@ -1,3 +1,4 @@
+import time
 import unittest
 import numpy as np
 
@@ -45,6 +46,17 @@ class TestMiniMaxC(unittest.TestCase):
             max_depth=8,
         )
 
+    def test_(self):
+        start_time = time.time()
+        self.minimax4x4.get_best_action(self.empty_board4x4)
+        end_time = time.time()
+        print(end_time - start_time)
+
+        start_time = time.time()
+        self.minimax4x4.get_best_action(self.empty_board4x4)
+        end_time = time.time()
+        print(end_time - start_time)
+
     def test_get_best_action(self):
         """
         Tests the method get_best_action().
@@ -54,6 +66,18 @@ class TestMiniMaxC(unittest.TestCase):
 
         self.assertEqual(0, self.minimax4x4.get_best_action(self.empty_board4x4))
         self.assertEqual(3, self.minimax4x4.get_best_action(self.board4x4))
+
+    def test_get_best_action_with_cache(self):
+        """
+        Tests the method get_best_action() by using the cache for already evaluated states.
+        """
+        action1 = self.minimax4x4.get_best_action(self.empty_board4x4)
+        start_time = time.time()
+        action2 = self.minimax4x4.get_best_action(self.empty_board4x4)
+        end_time = time.time()
+
+        self.assertEqual(action1, action2)
+        self.assertLessEqual(end_time - start_time, 0.1)  # check if second call took less than 0.1 seconds of time
 
 
 class TestMinMaxPlayerC(unittest.TestCase):
