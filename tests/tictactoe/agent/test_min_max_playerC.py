@@ -46,17 +46,6 @@ class TestMiniMaxC(unittest.TestCase):
             max_depth=8,
         )
 
-    def test_(self):
-        start_time = time.time()
-        self.minimax4x4.get_best_action(self.empty_board4x4)
-        end_time = time.time()
-        print(end_time - start_time)
-
-        start_time = time.time()
-        self.minimax4x4.get_best_action(self.empty_board4x4)
-        end_time = time.time()
-        print(end_time - start_time)
-
     def test_get_best_action(self):
         """
         Tests the method get_best_action().
