@@ -184,5 +184,4 @@ class TicTacToeBoard {
          */
         int get_immediate_blocking_moves();
 };
-
 #endif

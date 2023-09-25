@@ -138,7 +138,10 @@ bool TicTacToeBoard::check_terminated() {
 int TicTacToeBoard::check_winner() {
     for (int i = 0; i < this->row(); i++) {
         for (int j = 0; j < this->col(); j++) {
-            if (this->winning_move(std::make_tuple(i, j), true)) {
+            if (this->board[i][j] == 0) {
+                // Case: No tile placed
+                continue;
+            } else if (this->winning_move(std::make_tuple(i, j), true)) {
                 // Case: Your player won
                 return this->your_symbol;
             } else if (this->winning_move(std::make_tuple(i, j), false)) {
