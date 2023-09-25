@@ -75,6 +75,18 @@ class TicTacToeBoardC:
 
         TicTacToe_lib.get_reward.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
         TicTacToe_lib.get_reward.restype = ctypes.c_float
+        
+        TicTacToe_lib.get_your_corner_tiles.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
+        TicTacToe_lib.get_your_corner_tiles.restype = ctypes.c_int
+        
+        TicTacToe_lib.get_enemy_corner_tiles.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
+        TicTacToe_lib.get_enemy_corner_tiles.restype = ctypes.c_int
+        
+        TicTacToe_lib.get_your_middle_tiles.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
+        TicTacToe_lib.get_your_middle_tiles.restype = ctypes.c_int
+        
+        TicTacToe_lib.get_enemy_middle_tiles.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
+        TicTacToe_lib.get_enemy_middle_tiles.restype = ctypes.c_int
 
         TicTacToe_lib.get_immediate_winning_moves.argtypes = [ctypes.POINTER(ctypes.c_void_p)]
         TicTacToe_lib.get_immediate_winning_moves.restype = ctypes.c_int
@@ -224,6 +236,38 @@ class TicTacToeBoardC:
             float: reward value of the current state
         """
         return TicTacToe_lib.get_reward(self.obj)
+    
+    ################################
+    ####Feature-specific methods####
+    ################################
+    
+    def get_your_corner_tiles(self) -> int:
+        """
+        Returns:
+            int: number of your tiles, that are at the corner
+        """
+        return TicTacToe_lib.get_your_corner_tiles(self.obj)
+    
+    def get_enemy_corner_tiles(self) -> int:
+        """
+        Returns:
+            int: number of enemy tiles, that are at the corner
+        """
+        return TicTacToe_lib.get_enemy_corner_tiles(self.obj)
+    
+    def get_your_middle_tiles(self) -> int:
+        """
+        Returns:
+            int: number of your tiles, that are in the middle
+        """
+        return TicTacToe_lib.get_your_middle_tiles(self.obj)
+    
+    def get_enemy_middle_tiles(self) -> int:
+        """
+        Returns:
+            int: number of enemy tiles, that are in the middle
+        """
+        return TicTacToe_lib.get_enemy_middle_tiles(self.obj)
 
     def get_immediate_winning_moves(self) -> int:
         """

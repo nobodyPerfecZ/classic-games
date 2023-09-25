@@ -262,7 +262,76 @@ float TicTacToeBoard::get_reward() {
     }
 }
 
-/*** Feature-specific methods ***/
+//################################
+//####Feature-specific methods####
+//################################
+
+int TicTacToeBoard::get_your_corner_tiles() {
+    int counter = 0;
+    if (this->board[0][0] == this->your_symbol) {
+        // Case: top left corner
+        counter++;
+    }
+    if (this->board[0][this->col()-1] == this->your_symbol) {
+        // Case: top right corner
+        counter++;
+    }
+    if (this->board[this->row()-1][0] == this->your_symbol) {
+        // Case: bottom left corner
+        counter++;
+    }
+    if (this->board[this->row()-1][this->col()-1] == this->your_symbol) {
+        // Case: bottom right corner
+        counter++;
+    }
+    return counter;
+}
+
+int TicTacToeBoard::get_enemy_corner_tiles() {
+    int counter = 0;
+    if (this->board[0][0] == this->enemy_symbol) {
+        // Case: top left corner
+        counter++;
+    }
+    if (this->board[0][this->col()-1] == this->enemy_symbol) {
+        // Case: top right corner
+        counter++;
+    }
+    if (this->board[this->row()-1][0] == this->enemy_symbol) {
+        // Case: bottom left corner
+        counter++;
+    }
+    if (this->board[this->row()-1][this->col()-1] == this->enemy_symbol) {
+        // Case: bottom right corner
+        counter++;
+    }
+    return counter;
+}
+
+int TicTacToeBoard::get_your_middle_tiles() {
+    int counter = 0;
+    for (int i = 1; i < this->row()-1; i++) {
+        for (int j = 1; j < this->col()-1; j++) {
+            if (this->board[i][j] == this->your_symbol) {
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
+
+int TicTacToeBoard::get_enemy_middle_tiles() {
+    int counter = 0;
+    for (int i = 1; i < this->row()-1; i++) {
+        for (int j = 1; j < this->col()-1; j++) {
+            if (this->board[i][j] == this->enemy_symbol) {
+                counter++;
+            }
+        }
+    }
+    return counter;
+}
+
 int TicTacToeBoard::get_immediate_winning_moves() {
     int winning_moves = 0;
     for (int i = 0; i < this->row(); i++) {
@@ -431,6 +500,34 @@ extern "C" {
      */
     float get_reward(TicTacToeBoard* obj) {
         return obj->get_reward();
+    }
+
+    /**
+     * @brief Wrapper Function for get_your_corner_tiles()
+     */
+    int get_your_corner_tiles(TicTacToeBoard* obj) {
+        return obj->get_your_corner_tiles();
+    }
+    
+    /**
+     * @brief Wrapper Function for get_enemy_corner_tiles()
+     */
+    int get_enemy_corner_tiles(TicTacToeBoard* obj) {
+        return obj->get_enemy_corner_tiles();
+    }
+
+    /**
+     * @brief Wrapper Function for get_your_middle_tiles()
+     */
+    int get_your_middle_tiles(TicTacToeBoard* obj) {
+        return obj->get_your_middle_tiles();
+    }
+
+    /**
+     * @brief Wrapper Function for get_enemy_middle_tiles()
+     */
+    int get_enemy_middle_tiles(TicTacToeBoard* obj) {
+        return obj->get_enemy_middle_tiles();
     }
 
     /**

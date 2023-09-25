@@ -210,6 +210,42 @@ class TestTicTacToeBoardC(unittest.TestCase):
         self.assertEqual(0.0, self.board4x4.get_reward())
         self.assertEqual(1.0, self.terminated_board4x4.get_reward())
 
+    def test_get_your_corner_tiles(self):
+        """
+        Tests the method get_your_corner_tiles().
+        """
+        self.assertEqual(0, self.board3x3.get_your_corner_tiles())
+        self.assertEqual(2, self.terminated_board3x3.get_your_corner_tiles())
+        self.assertEqual(1, self.board4x4.get_your_corner_tiles())
+        self.assertEqual(3, self.terminated_board4x4.get_your_corner_tiles())
+
+    def test_get_enemy_corner_tiles(self):
+        """
+        Tests the method get_enemy_corner_tiles()
+        """
+        self.assertEqual(2, self.board3x3.get_enemy_corner_tiles())
+        self.assertEqual(2, self.terminated_board3x3.get_enemy_corner_tiles())
+        self.assertEqual(0, self.board4x4.get_enemy_corner_tiles())
+        self.assertEqual(1, self.terminated_board4x4.get_enemy_corner_tiles())
+
+    def test_get_your_middle_tiles(self):
+        """
+        Tests the method get_your_middle_tiles().
+        """
+        self.assertEqual(0, self.board3x3.get_your_middle_tiles())
+        self.assertEqual(0, self.terminated_board3x3.get_your_middle_tiles())
+        self.assertEqual(1, self.board4x4.get_your_middle_tiles())
+        self.assertEqual(2, self.terminated_board4x4.get_your_middle_tiles())
+
+    def test_get_enemy_middle_tiles(self):
+        """
+        Tests the method get_enemy_middle_tiles().
+        """
+        self.assertEqual(1, self.board3x3.get_enemy_middle_tiles())
+        self.assertEqual(1, self.terminated_board3x3.get_enemy_middle_tiles())
+        self.assertEqual(3, self.board4x4.get_enemy_middle_tiles())
+        self.assertEqual(2, self.terminated_board4x4.get_enemy_middle_tiles())
+
     def test_get_immediate_winning_moves(self):
         """
         Tests the method get_immediate_winning_moves().

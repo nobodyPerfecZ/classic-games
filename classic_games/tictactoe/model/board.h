@@ -151,8 +151,28 @@ class TicTacToeBoard {
         float get_reward();
 
         //################################
-        //###Feature-specific methods#####
+        //####Feature-specific methods####
         //################################
+        
+        /**
+         * @return int number of your tiles, that are at the corner
+         */
+        int get_your_corner_tiles();
+
+        /**
+         * @return int number of enemy tiles, that are at the corner
+         */
+        int get_enemy_corner_tiles();
+
+        /**
+         * @return int number of your tiles, that are in the middle
+         */
+        int get_your_middle_tiles();
+
+        /**
+         * @return int number of enemy tiles, that are in the middle
+         */
+        int get_enemy_middle_tiles();
 
         /**
          * @return int number of tiles, where an immediate move (next turn) refers to a win for your player.
