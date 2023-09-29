@@ -1,9 +1,8 @@
-#include "board.h"
-#include "../../util/converter.h"
+#include "boardC.h"
 #include <iostream>
 #include <cstdlib>
 
-bool TicTacToeBoard::is_terminated() {
+bool TicTacToeBoardC::is_terminated() {
     for (const std::vector<int>& row: this->board) {
         for (int elem : row) {
             if (elem == 0) {
@@ -14,7 +13,7 @@ bool TicTacToeBoard::is_terminated() {
     return true;
 }
 
-bool TicTacToeBoard::winning_move(std::tuple<int, int> pos, bool your_symbol) {
+bool TicTacToeBoardC::winning_move(std::tuple<int, int> pos, bool your_symbol) {
     // Check for right inputs
     if (std::tuple_size<decltype(pos)>::value != 2) {
         std::cerr << "#ERROR_TICTACTOEBOARD: pos should be a tuple in form (row, col)!";
@@ -99,31 +98,15 @@ bool TicTacToeBoard::winning_move(std::tuple<int, int> pos, bool your_symbol) {
     return false;
 }
 
-TicTacToeBoard::TicTacToeBoard(
-    std::vector<std::vector<int>> board, 
-    int tiles_to_win, 
-    int your_symbol, 
-    int enemy_symbol, 
-    bool your_start
-) {
-    this->board = board;
-    this->tiles_to_win = tiles_to_win;
-    this->your_symbol = your_symbol;
-    this->enemy_symbol = enemy_symbol;
-    this->current_player = your_start;
-    this->winner = 0;
-    this->history.push_back(this->board);
-};
-
-int TicTacToeBoard::row() {
-    return this->board.size();
+int TicTacToeBoardC::row() {
+    return static_cast<int>(this->board.size());
 }
 
-int TicTacToeBoard::col() {
-    return this->board[0].size();
+int TicTacToeBoardC::col() {
+    return static_cast<int>(this->board[0].size());
 }
 
-bool TicTacToeBoard::check_terminated() {
+bool TicTacToeBoardC::check_terminated() {
     // Check if the game is over (win or draw)
     this->winner = this->check_winner();
 
@@ -135,7 +118,7 @@ bool TicTacToeBoard::check_terminated() {
 
 }
 
-int TicTacToeBoard::check_winner() {
+int TicTacToeBoardC::check_winner() {
     for (int i = 0; i < this->row(); i++) {
         for (int j = 0; j < this->col(); j++) {
             if (this->board[i][j] == 0) {
@@ -153,15 +136,11 @@ int TicTacToeBoard::check_winner() {
     return 0;
 }
 
-std::vector<std::vector<int>> TicTacToeBoard::get_current() {
+std::vector<std::vector<int>> TicTacToeBoardC::get_current() {
     return this->board;
 }
 
-int TicTacToeBoard::get_successors_length() {
-    return this->get_successors().size();
-}
-
-std::vector<std::vector<std::vector<int>>> TicTacToeBoard::get_successors() {
+std::vector<std::vector<std::vector<int>>> TicTacToeBoardC::get_successors() {
     std::vector<std::vector<std::vector<int>>> successors;
     std::vector<int> actions = this->get_actions();
     std::vector<std::vector<int>> current_board = this->board;
@@ -180,37 +159,21 @@ std::vector<std::vector<std::vector<int>>> TicTacToeBoard::get_successors() {
     return successors;
 }
 
-int TicTacToeBoard::get_history_length() {
-    return this->history.size();
-}
-
-std::vector<std::vector<std::vector<int>>> TicTacToeBoard::get_history() {
+std::vector<std::vector<std::vector<int>>> TicTacToeBoardC::get_history() {
     return this->history;
 }
 
-int TicTacToeBoard::get_actions_length() {
-    int count = 0;
-    for(size_t i = 0; i < this->row(); i++) {
-        for (size_t j = 0; j < this->col(); j++) {
-            if (this->board[i][j] == 0) {
-                count++;
-            }
-        }
-    }
-    return count;
-}
-
-std::vector<int> TicTacToeBoard::get_actions() {
+std::vector<int> TicTacToeBoardC::get_actions() {
     // Flatten the vector
     std::vector<int> board_vec;
-    for (int i = 0; i < this->board.size(); i++) {
-        for (int j = 0; j < this->board[i].size(); j++) {
+    for (int i = 0; i < static_cast<int>(this->board.size()); i++) {
+        for (int j = 0; j < static_cast<int>(this->board[i].size()); j++) {
             board_vec.push_back(this->board[i][j]);
         }
     }
     // Get all possible actions
     std::vector<int> actions;
-    for (int i = 0; i < board_vec.size(); i++) {
+    for (int i = 0; i < static_cast<int>(board_vec.size()); i++) {
         if (board_vec[i] == 0) {
             actions.push_back(i);
         }
@@ -218,11 +181,11 @@ std::vector<int> TicTacToeBoard::get_actions() {
     return actions;
 }
 
-bool TicTacToeBoard::get_current_player() {
+bool TicTacToeBoardC::get_current_player() {
     return this->current_player;
 }
 
-void TicTacToeBoard::set(int action) {
+void TicTacToeBoardC::set(int action) {
     int row = action / this->row();
     int col = action % this->col();
 
@@ -246,7 +209,7 @@ void TicTacToeBoard::set(int action) {
     }
 }
 
-float TicTacToeBoard::get_reward() {
+float TicTacToeBoardC::get_reward() {
     if (this->winner == this->your_symbol) {
         // Case: Player1 won the game
         // Return a reward of 1.0
@@ -269,7 +232,7 @@ float TicTacToeBoard::get_reward() {
 //####Feature-specific methods####
 //################################
 
-int TicTacToeBoard::get_your_corner_tiles() {
+int TicTacToeBoardC::get_your_corner_tiles() {
     int counter = 0;
     if (this->board[0][0] == this->your_symbol) {
         // Case: top left corner
@@ -290,7 +253,7 @@ int TicTacToeBoard::get_your_corner_tiles() {
     return counter;
 }
 
-int TicTacToeBoard::get_enemy_corner_tiles() {
+int TicTacToeBoardC::get_enemy_corner_tiles() {
     int counter = 0;
     if (this->board[0][0] == this->enemy_symbol) {
         // Case: top left corner
@@ -311,7 +274,7 @@ int TicTacToeBoard::get_enemy_corner_tiles() {
     return counter;
 }
 
-int TicTacToeBoard::get_your_middle_tiles() {
+int TicTacToeBoardC::get_your_middle_tiles() {
     int counter = 0;
     for (int i = 1; i < this->row()-1; i++) {
         for (int j = 1; j < this->col()-1; j++) {
@@ -323,7 +286,7 @@ int TicTacToeBoard::get_your_middle_tiles() {
     return counter;
 }
 
-int TicTacToeBoard::get_enemy_middle_tiles() {
+int TicTacToeBoardC::get_enemy_middle_tiles() {
     int counter = 0;
     for (int i = 1; i < this->row()-1; i++) {
         for (int j = 1; j < this->col()-1; j++) {
@@ -335,7 +298,7 @@ int TicTacToeBoard::get_enemy_middle_tiles() {
     return counter;
 }
 
-int TicTacToeBoard::get_immediate_winning_moves() {
+int TicTacToeBoardC::get_immediate_winning_moves() {
     int winning_moves = 0;
     for (int i = 0; i < this->row(); i++) {
         for (int j = 0; j < this->col(); j++) {
@@ -354,7 +317,7 @@ int TicTacToeBoard::get_immediate_winning_moves() {
     return winning_moves;
 }
 
-int TicTacToeBoard::get_immediate_blocking_moves() {
+int TicTacToeBoardC::get_immediate_blocking_moves() {
     int blocking_moves = 0;
     for (int i = 0; i < this->row(); i++) {
         for (int j = 0; j < this->col(); j++) {
@@ -371,179 +334,4 @@ int TicTacToeBoard::get_immediate_blocking_moves() {
         }
     }
     return blocking_moves;
-}
-
-// ctypes wrapper
-extern "C" {
-    /**
-     * @brief Wrapper Function to free allocated memory
-     */
-    void delete_TicTacToeBoard(TicTacToeBoard* obj) {
-        delete obj;
-    }
-
-    /**
-     * @brief Wrapper Function to free allocated memory
-     */
-    void delete_vector(int* arr) {
-        delete arr;
-    }
-
-    /**
-     * @brief Wrapper Function for TicTacToeBoard()
-     */
-    TicTacToeBoard* create_TicTacToeBoard(
-        int* board, 
-        int row, 
-        int col,
-        int tiles_to_win,
-        int your_symbol,
-        int enemy_symbol,
-        bool your_start
-    ) {
-        return new TicTacToeBoard(Converter::to_c_plus_matrix(board, row, col), tiles_to_win, your_symbol, enemy_symbol, your_start);
-    }
-
-    /**
-     * @brief Wrapper Function for row()
-     */
-    int row(TicTacToeBoard* obj) {
-        return obj->row();
-    }
-
-    /**
-     * @brief Wrapper Function for col()
-     */
-    int col(TicTacToeBoard* obj) {
-        return obj->col();
-    }
-
-    /**
-     * @brief Wrapper Function for check_terminated()
-     */
-    bool check_terminated(TicTacToeBoard* obj) {
-        return obj->check_terminated();
-    }
-
-    /**
-     * @brief Wrapper Function for check_winner()
-     */
-    int check_winner(TicTacToeBoard* obj) {
-        return obj->check_winner();
-    }
-
-    /**
-     * @brief Wrapper Function for get_current()
-     */
-    int* get_current(TicTacToeBoard* obj) {
-        return Converter::to_c_matrix(obj->get_current());
-    }
-
-    /**
-     * @brief Wrapper Function for get_successors_length()
-     */
-    int get_successors_length(TicTacToeBoard* obj) {
-        return obj->get_successors_length();
-    }
-
-    /**
-     * @brief Wrapper Function for get_successors()
-     */
-    int* get_successors(TicTacToeBoard* obj) {
-        return Converter::to_c_list_matrix(obj->get_successors());
-    }
-
-    /**
-     * @brief Wrapper Function for get_history_length()
-     */
-    int get_history_length(TicTacToeBoard* obj) {
-        return obj->get_history_length();
-    }
-
-    /**
-     * @brief Wrapper Function for get_history()
-     */
-    int* get_history(TicTacToeBoard* obj) {
-        return Converter::to_c_list_matrix(obj->get_history());
-    }
-
-    /**
-     * @brief Wrapper Function for get_actions_length()
-     */
-    int get_actions_length(TicTacToeBoard* obj) {
-        return obj->get_actions_length();
-    }
-
-    /**
-     * @brief Wrapper Function for get_actions()
-     * 
-     * @param obj 
-     * @return std::vector<int> 
-     */
-    int* get_actions(TicTacToeBoard* obj) {
-        return Converter::to_c_vector(obj->get_actions());
-    }
-
-    /**
-     * @brief Wrapper Function for get_current_player()
-     */
-    bool get_current_player(TicTacToeBoard* obj) {
-        return obj->get_current_player();
-    }
-
-    /**
-     * @brief Wrapper Function for set(int action)
-     */
-    void set(TicTacToeBoard* obj, int action) {
-        obj->set(action);
-    }
-
-    /**
-     * @brief Wrapper Function for get_reward()
-     */
-    float get_reward(TicTacToeBoard* obj) {
-        return obj->get_reward();
-    }
-
-    /**
-     * @brief Wrapper Function for get_your_corner_tiles()
-     */
-    int get_your_corner_tiles(TicTacToeBoard* obj) {
-        return obj->get_your_corner_tiles();
-    }
-    
-    /**
-     * @brief Wrapper Function for get_enemy_corner_tiles()
-     */
-    int get_enemy_corner_tiles(TicTacToeBoard* obj) {
-        return obj->get_enemy_corner_tiles();
-    }
-
-    /**
-     * @brief Wrapper Function for get_your_middle_tiles()
-     */
-    int get_your_middle_tiles(TicTacToeBoard* obj) {
-        return obj->get_your_middle_tiles();
-    }
-
-    /**
-     * @brief Wrapper Function for get_enemy_middle_tiles()
-     */
-    int get_enemy_middle_tiles(TicTacToeBoard* obj) {
-        return obj->get_enemy_middle_tiles();
-    }
-
-    /**
-     * @brief Wrapper Function for get_immediate_winning_moves()
-     */
-    int get_immediate_winning_moves(TicTacToeBoard* obj) {
-        return obj->get_immediate_winning_moves();
-    }
-
-    /**
-     * @brief Wrapper Function for get_immediate_blocking_moves()
-     */
-    int get_immediate_blocking_moves(TicTacToeBoard* obj) {
-        return obj->get_immediate_blocking_moves();
-    }
 }

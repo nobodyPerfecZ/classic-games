@@ -7,7 +7,7 @@ from gymnasium.spaces import Discrete, Box
 
 from classic_games.tictactoe.agent.abstract_player import Player
 from classic_games.tictactoe.agent.random_player import RandomPlayer
-from classic_games.tictactoe.model.boardC import TicTacToeBoardC
+from classic_games.tictactoe.model.board import TicTacToeBoard
 from classic_games.tictactoe.model.render import TicTacToeRender
 from classic_games.tictactoe.model.metadata import Metadata
 
@@ -69,7 +69,7 @@ class TicTacToeEnv(gym.Env):
         self._seed(seed)
 
         # Create the environment
-        self._board = TicTacToeBoardC(
+        self._board = TicTacToeBoard(
             board=np.zeros(shape=self._rule_settings.board_shape, dtype=np.int32),
             tiles_to_win=self._rule_settings.tiles_to_win,
             your_symbol=self._rule_settings.your_symbol,
@@ -102,7 +102,7 @@ class TicTacToeEnv(gym.Env):
         self._seed(seed)
 
         # Reset the board
-        self._board = TicTacToeBoardC(
+        self._board = TicTacToeBoard(
             board=np.zeros(shape=self._rule_settings.board_shape, dtype=np.int32),
             tiles_to_win=self._rule_settings.tiles_to_win,
             your_symbol=self._rule_settings.your_symbol,

@@ -1,7 +1,7 @@
 import unittest
-from unittest.mock import patch
-
 import numpy as np
+
+from unittest.mock import patch
 
 from classic_games.tictactoe.agent.human_player import HumanPlayer
 

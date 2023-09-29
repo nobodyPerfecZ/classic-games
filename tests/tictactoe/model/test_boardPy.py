@@ -1,17 +1,17 @@
 import unittest
 import numpy as np
 
-from classic_games.tictactoe.model.boardC import TicTacToeBoardC
+from classic_games.tictactoe.model.board import TicTacToeBoard
 
 
-class TestTicTacToeBoardC(unittest.TestCase):
+class TestTicTacToeBoard(unittest.TestCase):
     """
-    Tests the class TicTacToeBoardC.
+    Tests the (cython) class TicTacToeBoard.
     """
 
     def setUp(self):
         # Non-terminated board (3x3)
-        self.board3x3 = TicTacToeBoardC(
+        self.board3x3 = TicTacToeBoard(
             board=np.array([
                 [0, 1, 0],
                 [1, -1, 1],
@@ -20,7 +20,7 @@ class TestTicTacToeBoardC(unittest.TestCase):
             your_start=False,
         )
         # terminated board (3x3)
-        self.terminated_board3x3 = TicTacToeBoardC(
+        self.terminated_board3x3 = TicTacToeBoard(
             board=np.array([
                 [1, 1, 1],
                 [1, -1, 1],
@@ -29,7 +29,7 @@ class TestTicTacToeBoardC(unittest.TestCase):
             your_start=False,
         )
         # Non-terminated board (4x4)
-        self.board4x4 = TicTacToeBoardC(
+        self.board4x4 = TicTacToeBoard(
             board=np.array([
                 [1, 1, 1, 0],
                 [1, -1, 1, 0],
@@ -40,7 +40,7 @@ class TestTicTacToeBoardC(unittest.TestCase):
             your_start=False,
         )
         # terminated board (4x4)
-        self.terminated_board4x4 = TicTacToeBoardC(
+        self.terminated_board4x4 = TicTacToeBoard(
             board=np.array([
                 [1, 1, -1, 1],
                 [1, -1, 1, 1],

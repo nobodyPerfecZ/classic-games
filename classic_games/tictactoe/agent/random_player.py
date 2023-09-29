@@ -3,7 +3,7 @@ import numpy as np
 from typing import Optional
 from gymnasium.core import ObsType
 from classic_games.tictactoe.agent.abstract_player import Player
-from classic_games.tictactoe.model.boardC import TicTacToeBoardC
+from classic_games.tictactoe.model.board import TicTacToeBoard
 
 
 class RandomPlayer(Player):
@@ -23,7 +23,7 @@ class RandomPlayer(Player):
         self._turn += 1
 
         # Get all valid actions
-        state = TicTacToeBoardC(
+        state = TicTacToeBoard(
             board=board,
             your_symbol=self._your_symbol,
             enemy_symbol=self._enemy_symbol,
@@ -31,7 +31,7 @@ class RandomPlayer(Player):
             your_start=True,
         )
         actions = state.get_actions()
-        return np.random.choice(actions)
+        return int(np.random.choice(actions))
 
     def act(self, board: ObsType) -> int:
         if self._turn == 0:
@@ -44,9 +44,9 @@ class RandomPlayer(Player):
             self._turn += 1
 
             # Get all valid actions
-            state = TicTacToeBoardC(board)
+            state = TicTacToeBoard(board)
             actions = state.get_actions()
-            return np.random.choice(actions)
+            return int(np.random.choice(actions))
 
     def end(self, board: ObsType) -> int:
         pass

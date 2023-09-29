@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <limits>
 
-class MiniMax {
+class MiniMaxC {
     private:
         std::unordered_map<std::vector<std::vector<int>>, std::tuple<float, int>, decltype(&Hasher::matrix_hash)> cache;
         bool your_start = true;
@@ -55,21 +55,31 @@ class MiniMax {
 
     public:
         /**
-         * @brief Construct a new Minimax Object
+         * @brief Construct a new MiniMaxC Object
          *
          * @param your_symbol symbol of your player
          * @param enemy_symbol symbol of enemy player
          * @param tiles_to_win number of tiles to place in row, column, diagonal, anti-diagonal to win the game
          * @param max_depth maximal depth for the minimax algorithm
          */
-        MiniMax(int your_symbol, int enemy_symbol, int tiles_to_win, int max_depth);
+        MiniMaxC(int your_symbol, int enemy_symbol, int tiles_to_win, int max_depth) {
+            this->cache = std::unordered_map<std::vector<std::vector<int>>, std::tuple<float, int>, decltype(&Hasher::matrix_hash)>(10, Hasher::matrix_hash);
+            this->your_start = true;
+            this->depth = 0;
+            this->alpha = -std::numeric_limits<float>::infinity();
+            this->beta = std::numeric_limits<float>::infinity();
+            this->your_symbol = your_symbol;
+            this->enemy_symbol = enemy_symbol;
+            this->tiles_to_win = tiles_to_win;
+            this->max_depth = max_depth;
+        }
 
         /**
          * @brief Returns the best action from the given state, according to the MiniMax algorithm.
          * 
-         * @param best_action current state
+         * @param board current state
          * @return int best action with the given state
          */
-        int get_best_action(std::vector<std::vector<int>> best_action);
+        int get_best_action(std::vector<std::vector<int>> board);
 };
 #endif

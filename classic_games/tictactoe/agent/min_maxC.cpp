@@ -1,17 +1,16 @@
-#include "min_max.h"
-#include "../model/board.h"
-#include "../../util/converter.h"
+#include "min_maxC.h"
+#include "../model/boardC.h"
 #include <iostream>
 
-void MiniMax::reset() {
+void MiniMaxC::reset() {
     this->your_start = true;
     this->depth = 0;
     this->alpha = -std::numeric_limits<float>::infinity();
     this->beta = std::numeric_limits<float>::infinity();
 }
 
-std::tuple<float, int> MiniMax::minimax(std::vector<std::vector<int>> board) {
-    TicTacToeBoard state = TicTacToeBoard(
+std::tuple<float, int> MiniMaxC::minimax(std::vector<std::vector<int>> board) {
+    TicTacToeBoardC state = TicTacToeBoardC(
         board, 
         this->tiles_to_win, 
         this->your_symbol, 
@@ -50,8 +49,8 @@ std::tuple<float, int> MiniMax::minimax(std::vector<std::vector<int>> board) {
     }
 }
 
-std::tuple<float, int> MiniMax::max(std::vector<std::vector<int>> board) {
-    TicTacToeBoard state = TicTacToeBoard(
+std::tuple<float, int> MiniMaxC::max(std::vector<std::vector<int>> board) {
+    TicTacToeBoardC state = TicTacToeBoardC(
         board, 
         this->tiles_to_win, 
         this->your_symbol, 
@@ -88,8 +87,8 @@ std::tuple<float, int> MiniMax::max(std::vector<std::vector<int>> board) {
 }
 
 
-std::tuple<float, int> MiniMax::min(std::vector<std::vector<int>> board) {
-    TicTacToeBoard state = TicTacToeBoard(
+std::tuple<float, int> MiniMaxC::min(std::vector<std::vector<int>> board) {
+    TicTacToeBoardC state = TicTacToeBoardC(
         board, 
         this->tiles_to_win,
         this->your_symbol, 
@@ -125,19 +124,7 @@ std::tuple<float, int> MiniMax::min(std::vector<std::vector<int>> board) {
     return best_v;
 }
 
-MiniMax::MiniMax(int your_symbol, int enemy_symbol, int tiles_to_win, int max_depth) {
-    this->cache = std::unordered_map<std::vector<std::vector<int>>, std::tuple<float, int>, decltype(&Hasher::matrix_hash)>(10, Hasher::matrix_hash);
-    this->your_start = true;
-    this->depth = 0;
-    this->alpha = -std::numeric_limits<float>::infinity();
-    this->beta = std::numeric_limits<float>::infinity();
-    this->your_symbol = your_symbol;
-    this->enemy_symbol = enemy_symbol;
-    this->tiles_to_win = tiles_to_win;
-    this->max_depth = max_depth;
-}
-
-int MiniMax::get_best_action(std::vector<std::vector<int>> board) {
+int MiniMaxC::get_best_action(std::vector<std::vector<int>> board) {
     if (this->cache.count(board) > 0) {
         // Case: Board state was already evaluated
         std::tuple<float, int> result = this->cache[board];
@@ -159,21 +146,4 @@ int MiniMax::get_best_action(std::vector<std::vector<int>> board) {
     float reward = std::get<0>(result);
     int action = std::get<1>(result);
     return action;
-} 
-
-// ctypes wrapper
-extern "C" {
-    /**
-     * @brief Wrapper Function for MiniMax()
-     */
-    MiniMax* create_MiniMax(int your_symbol, int enemy_symbol, int tiles_to_win, int max_depth) {
-        return new MiniMax(your_symbol, enemy_symbol, tiles_to_win, max_depth);
-    }
-
-    /**
-     * @brief Wrapper Function for get_best_action()
-     */
-    int get_best_action(MiniMax* obj, int* board, int row, int col) {
-        return obj->get_best_action(Converter::to_c_plus_matrix(board, row, col));
-    }
 }

@@ -4,14 +4,21 @@
 #include <vector>
 #include <tuple>
 
-class TicTacToeBoard {
+class TicTacToeBoardC {
     private:
+        /* */
         std::vector<std::vector<int>> board;
+        /* number of places that one player needs to win the game */
         int tiles_to_win;
+        /* symbol of your player on the board */
         int your_symbol;
+        /* symbol of enemy player on the board */
         int enemy_symbol;
+        /* which player makes the next turn */
         bool current_player;
+        /* current winner of the game */
         int winner;
+        /* list of boards which moves are done from beginning */
         std::vector<std::vector<std::vector<int>>> history;
 
         /**
@@ -34,7 +41,7 @@ class TicTacToeBoard {
     public:
         
         /**
-         * @brief Construct a new Tic Tac Toe Board object
+         * @brief Construct a new TicTacToeBoardC object
          * 
          * @param board matrix of the game state
          * @param tiles_to_win number of tiles to place in row, column, diagonal, anti-diagonal to win the game
@@ -42,13 +49,26 @@ class TicTacToeBoard {
          * @param enemy_symbol symbol of enemy player
          * @param your_start your player starts
          */
-        TicTacToeBoard(
+        TicTacToeBoardC(
             std::vector<std::vector<int>> board, 
             int tiles_to_win, 
             int your_symbol, 
             int enemy_symbol, 
             bool your_start
-        );
+        ) {
+            this->board = board;
+            this->tiles_to_win = tiles_to_win;
+            this->your_symbol = your_symbol;
+            this->enemy_symbol = enemy_symbol;
+            this->current_player = your_start;
+            this->winner = 0;
+            this->history.push_back(this->board);
+        };
+
+        /**
+         * @brief Destructor of the TicTacToeBoardC
+         */
+        ~TicTacToeBoardC() {};
 
         /**
          * @return int number of rows of the board
@@ -83,13 +103,6 @@ class TicTacToeBoard {
          * @return std::vector<std::vector<int>> current board state
          */
         std::vector<std::vector<int>> get_current();
-        
-        /**
-         * @brief Returns the number of successor boards given the current board
-         * 
-         * @return int number of successor boards
-         */
-        int get_successors_length();
 
         /**
          * @brief Returns all successor boards, if we take a single action from the current board.
@@ -97,13 +110,6 @@ class TicTacToeBoard {
          * @return std::vector<std::vector<std::vector<int>>> list of successor boards
          */
         std::vector<std::vector<std::vector<int>>> get_successors();
-        
-        /**
-         * @brief Returns the length of the entire history of changes on the board.
-         * 
-         * @return int length of the entire history of changes
-         */
-        int get_history_length();
 
         /**
          * @brief Returns the entire history of changes on the board.
@@ -111,13 +117,6 @@ class TicTacToeBoard {
          * @return std::vector<std::vector<std::vector<int>>> history of changes of the board
          */
         std::vector<std::vector<std::vector<int>>> get_history();
-
-        /**
-         * @brief Returns the length of the output get_actions().
-         * 
-         * @return int length of output get_actions()
-         */
-        int get_actions_length();
         
         /**
          * @brief Returns all possible actions of the board.

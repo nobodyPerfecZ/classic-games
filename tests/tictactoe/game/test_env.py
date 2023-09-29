@@ -2,7 +2,7 @@ import unittest
 import gymnasium as gym
 import numpy as np
 
-from classic_games.tictactoe.agent.min_max_playerC import MinMaxPlayerC
+from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer
 from classic_games.tictactoe.agent.random_player import RandomPlayer
 from classic_games.tictactoe.model.metadata import Metadata
 
@@ -47,7 +47,7 @@ class TestTicTacToeV0(unittest.TestCase):
         Tests the method step().
         """
         observation, info = self.env.reset(seed=10)
-        your_player = MinMaxPlayerC(
+        your_player = MinMaxPlayer(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
@@ -93,7 +93,7 @@ class TestTicTacToeV0(unittest.TestCase):
         """
         # Perform actions and render frames
         observation, info = self.env.reset(seed=0)
-        your_player = MinMaxPlayerC(
+        your_player = MinMaxPlayer(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
@@ -113,7 +113,7 @@ class TestTicTacToeV0(unittest.TestCase):
         Tests to run one episode
         """
         observation, info = self.env.reset(seed=0)
-        your_player = MinMaxPlayerC(
+        your_player = MinMaxPlayer(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
@@ -143,7 +143,7 @@ class TestTicTacToeV0(unittest.TestCase):
         Tests to run a gym loop.
         """
         rewards = 0.0
-        your_player = MinMaxPlayerC(
+        your_player = MinMaxPlayer(
             your_symbol=1,
             enemy_symbol=-1,
             tiles_to_win=3,
