@@ -14,7 +14,7 @@ std = args.std
 
 extensions = [
     Extension("classic_games.tictactoe.model.board", sources=["classic_games/tictactoe/model/boardPy.pyx", "classic_games/tictactoe/model/boardC.cpp"], extra_compile_args=[f"/std:{std}"]),
-    Extension("classic_games.tictactoe.agent.min_max", sources=["classic_games/tictactoe/agent/min_maxPy.pyx", "classic_games/tictactoe/agent/min_maxC.cpp", "classic_games/tictactoe/model/boardC.cpp", "classic_games/util/hasher.cpp"], extra_compile_args=["/std:{std}"]),
+    Extension("classic_games.tictactoe.agent.min_max", sources=["classic_games/tictactoe/agent/min_maxPy.pyx", "classic_games/tictactoe/agent/min_maxC.cpp", "classic_games/tictactoe/model/boardC.cpp", "classic_games/util/hasher.cpp"], extra_compile_args=[f"/std:{std}"]),
 ]
 
 # Load the requirements from requirements.txt
