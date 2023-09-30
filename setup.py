@@ -5,7 +5,7 @@ import sys
 
 # Build the argument parser for defining the used c++ version
 argparser = argparse.ArgumentParser(description="Custom argument parser")
-argparser.add_argument("--std", type=str, help="defines the used c++ version for the compiler", default="c++17", required=True)
+argparser.add_argument("--std", type=str, help="defines the used c++ version for the compiler", default="c++17")
 args, unknown = argparser.parse_known_args()
 sys.argv = [sys.argv[0]] + unknown
 
@@ -43,3 +43,4 @@ setup(
     install_requires=req,
     ext_modules=cythonize(extensions, language_level="3"),
 )
+

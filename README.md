@@ -33,6 +33,8 @@ where you can play against the enemy player.
 ```python
 import gymnasium as gym
 
+from classic_games.tictactoe.game.env import TicTacToeEnv
+
 env = gym.make("TicTacToe-v0", render_mode="human", rule_settings=meta, enemy_player=enemy_player)
 ```
 
@@ -41,9 +43,9 @@ Now you have created the TicTacToe Environment, which can now be used like any o
 The following example shows of how to use the TicTacToe Environment to play with a Minimax Agent against the random
 player:
 ```python
-from classic_games.tictactoe.agent.min_max_playerC import MinMaxPlayerC
+from classic_games.tictactoe.agent.min_max_player import MinMaxPlayer
 
-your_player = MinMaxPlayerC(your_symbol=1, enemy_symbol=-1, tiles_to_win=3)
+your_player = MinMaxPlayer(your_symbol=1, enemy_symbol=-1, tiles_to_win=3)
 for i in range(10):  # Play 10 games
     observation, info = env.reset()
     your_player.reset()
